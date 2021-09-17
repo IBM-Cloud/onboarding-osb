@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "bed5f62a-91a3-4a2c-916c-84302149ef01",
+		"name": "sdk-broker-cf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get catalog",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "broker!23",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/catalog",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"catalog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Instance BASE",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "EducationServ$ce2roker!",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-API-Originating-Identity",
+						"value": "ibmcloud eyJpYW1faWQiOiJJQk1pZC01NTAwMDNVRU5DIn0=",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2.12",
+						"type": "text"
+					},
+					{
+						"key": "x-bluemix-region",
+						"value": "dal09",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"context\":{\"account_id\":\"0e79133675a31dbfd10504847a9e174f\",\"crn\":\"crn:v1:staging:public:education:us-south:a/0e79133675a31dbfd10504847a9e174f:554c5557-6fc0-49ea-b5c3-36a50bcabf45::\",\"name\":\"cfe-base-apr29\",\"platform\":\"ibmcloud\",\"resource_group_crn\":\"crn:v1:staging:public:resource-controller::a/0e79133675a31dbfd10504847a9e174f::resource-group:ae7d4e38f61d481da0879851298a7cc8\",\"target_crn\":\"crn:v1:staging:public:globalcatalog::::deployment:eea9fab8-94bb-499b-a2b5-51076b87c36a%3Aus-south88741\"},\"parameters\":{\"ADDITIONAL_GIGABYTE\":\"100GB\",\"CONCURRENT_USER_PLANNED\":\"50\"},\"plan_id\":\"eea9fab8-94bb-499b-a2b5-51076b87c36a\",\"service_id\":\"25929010-dbe4-11ea-aa5a-0b16aa325bc2\"}"
+				},
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/service_instances/crn123?accepts_incomplete=true",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"service_instances",
+						"crn123"
+					],
+					"query": [
+						{
+							"key": "accepts_incomplete",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Instance Lite",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "EducationServ$ce2roker!",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-API-Originating-Identity",
+						"value": "ibmcloud eyJpYW1faWQiOiJJQk1pZC01NTAwMDNVRU5DIn0=",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2.12",
+						"type": "text"
+					},
+					{
+						"key": "x-bluemix-region",
+						"value": "dal03",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"context\":{\"account_id\":\"0e79133675a31dbfd10504847a9e174f\",\"crn\":\"crnaa:v1:staging:public:education:dal09:a/0e79133675a31dbfd10504847a9e174f:8c182d00-ef24-491a-abdf-f07453148ca5::\",\"name\":\"Cloud for Education-nz\",\"platform\":\"ibmcloud\",\"resource_group_crn\":\"crn:v1:staging:public:resource-controller::a/0e79133675a31dbfd10504847a9e174f::resource-group:b4a4a0d0211a86f060aed7d5ecb0e9fa\",\"target_crn\":\"crn:v1:staging:public:globalcatalog::::deployment:99524a51-7c82-4e62-8e2d-7a8d2e270e4f%3Adal0969677\"},\"parameters\":{},\"plan_id\":\"8c2f2841-4cb7-44b6-88d7-2802d7e031b5\",\"service_id\":\"25929010-dbe4-11ea-aa5a-0b16aa325bc2\"}"
+				},
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/service_instances/crn124?accepts_incomplete=true",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"service_instances",
+						"crn124"
+					],
+					"query": [
+						{
+							"key": "accepts_incomplete",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get last operation",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "broker!23",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/service_instances/crn124/last_operation?plan_id=lite123&service_id=service123",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"service_instances",
+						"crn124",
+						"last_operation"
+					],
+					"query": [
+						{
+							"key": "plan_id",
+							"value": "lite123"
+						},
+						{
+							"key": "service_id",
+							"value": "service123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Provision",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "broker!23",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-API-Originating-Identity",
+						"value": "ibmcloud eyJpYW1faWQiOiJJQk1pZC01NTAwMDNVRU5DIn0=",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2.12",
+						"type": "text"
+					},
+					{
+						"key": "x-bluemix-region",
+						"value": "dal03",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"context\":{\"name\":\"Hello Service Test\",\"platform\":\"ibmcloud\"},\"parameters\":{},\"plan_id\":\"lite123\",\"service_id\":\"service123\"}"
+				},
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/service_instances/crn127?accepts_incomplete=true",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"service_instances",
+						"crn127"
+					],
+					"query": [
+						{
+							"key": "accepts_incomplete",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "De-Provision",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "broker!23",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-API-Originating-Identity",
+						"value": "ibmcloud eyJpYW1faWQiOiJJQk1pZC01NTAwMDNVRU5DIn0=",
+						"type": "text"
+					},
+					{
+						"key": "X-Broker-Api-Version",
+						"value": "2.12",
+						"type": "text"
+					},
+					{
+						"key": "x-bluemix-region",
+						"value": "dal03",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"context\":{\"name\":\"Hello Service Test\",\"platform\":\"ibmcloud\"},\"parameters\":{},\"plan_id\":\"lite123\",\"service_id\":\"service123\"}"
+				},
+				"url": {
+					"raw": "https://osb-sdk.mybluemix.net/v2/service_instances/crn127?accepts_incomplete=true&plan_id=lite123&service_id=service123",
+					"protocol": "https",
+					"host": [
+						"osb-sdk",
+						"mybluemix",
+						"net"
+					],
+					"path": [
+						"v2",
+						"service_instances",
+						"crn127"
+					],
+					"query": [
+						{
+							"key": "accepts_incomplete",
+							"value": "true"
+						},
+						{
+							"key": "plan_id",
+							"value": "lite123"
+						},
+						{
+							"key": "service_id",
+							"value": "service123"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
