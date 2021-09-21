@@ -4,47 +4,51 @@
 ## Overview
 This repository provides a reference [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB)  broker for first party and third party service providers to quickly deploy and onboard their services on IBM Cloud. 
 
+There are 2 way to onboard a service into IBM Cloud 
+  - the traditional [Staging Resource Management Console](https://test.cloud.ibm.com/onboarding/dashboard) for first party and [Resource Management Console](https://cloud.ibm.com/onboarding/dashboard) for third party services 
+  - the new [Partner Center](https://test.cloud.ibm.com/partner-center/sell) for third party services.
 
-To use the broker in RMC, the broker app has to be deployed and made publicly available. The project provides a CLI tool to 
- - build the Java OSB broker code  
- - create a docker container image, 
+This broker project can be used with either of the onboarding approaches.
+
+During the course of this setup, you would be using the CLI automation provided to: 
+
+ - configure and build the Java OSB broker code  
+ - create a docker container image of the broker, 
  - upload it to IBM Container Registry 
- - and deploy the image to Cloud Foundry 
+ - create an IBM Cloud Foundry or IBM Code Engine app using the OSB container image 
 
 ## Pre-requisites
-
-
-The Service Onboarding need to be intiaited either in [RMC](https://test.cloud.ibm.com/onboarding/dashboard) or Partner Center 
 
 
 ### Software and Services
 1.  [Docker](https://docs.docker.com/engine/install/) setup locally on your computer
 ### Privlilges
 
-1.  You should be added to the service's Resource Management Console entry [RMC](https://test.cloud.ibm.com/onboarding/dashboard) as a contributor
-2.  You should be added to service's IBM Cloud account
-3.  You should have the following access priviiges on the IBM Cloud account you want to deploy the broker to
-      - Editor access to Cloud Foundry Enterprise Environment
-      - Writer and Editor access for Container Registry
+The following privliges are required 
+1. Be a contributor in RMC if onboarding using RMC 
+2. Be a user in IBM Cloud account where the service is being onboarded
+3. Writer and Editor access to IBM Container Registry
+3. Editor access to IBM Cloud Foundry or Code Engine
 
->  Note: The broker can be deployed on any IBM Cloud account. It does not have to be one the service's Cloud account
+
+>  Note: The broker need not be deployed on the same IBM Cloud account on which the service is being onboarded.
 
 ## Creating an IBM Container Registry namespace
 
-The cli automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. If you do not have access to such a namespace, please follow these [instructions](https://cloud.ibm.com/docs/Registry?topic=Registry-getting-started#gs_registry_namespace_add) to create one.
+The CLI automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. If you do not have access to such a namespace, please follow these [instructions](https://cloud.ibm.com/docs/Registry?topic=Registry-getting-started#gs_registry_namespace_add) to create one.
 
 
 ## Deploying the Broker to Cloud Foundry
 
 1. Clone the repo 
 
-        git clone git@github.ibm.com:dwedge/osb-sdk.git
+        git clone https://github.com/IBM-Cloud/onboarding-osb.git
 
-2. Set the following environment variables at the OS level. An easy way to do this is to fill out the [deploy/build.config.properties](deploy/build.config.properties)) with the help provided below.
+2. Fill out the `build.config.properties` with the instructions provided below and export the file(s) to create OS environment variables 
 
-   >   Note: If you do not want to source the properties as environment variables the below properties can also directly be set in this properties file:<br />
+   >   Note: If you do not want to export the properties as environment variables, the deploying will still work as long as the properties are set in this properties file(s):<br />
     build: [deploy/build.config.properties](deploy/build.config.properties) <br />
-    code engine:[deploy/ce/ce.config.properties](deploy/ce/ce.config.properties) <br />
+    code engine:[deploy/ce/ce.config.properties](deploy/ce/ce.config.properties)  OR 
     cloud foundry:[deploy/cf/cf.config.properties](deploy/cf/cf.config.properties)
 
 
@@ -52,6 +56,8 @@ The cli automation requires an IBM Container Registry namespace to be provided i
 
     ## Build Properties
 
+    - ONBOARDING_ENV
+      - Should be set to `stage` or `prod` based on whether the service is being onboarded to Staging RMC (used by first party services) or prod RMC and PC (used by third party services)
     - GC_OBJECT_ID
       <!-- - To fetch catalog.json -->
       - Service ID defined in RMC for your service
@@ -59,6 +65,8 @@ The cli automation requires an IBM Container Registry namespace to be provided i
         - Example: RMC summary for test-osb service: `https://test.cloud.ibm.com/onboarding/summary/[your-service]`
     - ONBOARDING_IAM_API_KEY
       - Api key to access test Global Catalog api
+    - DEPLOYMENT_IAM_API_KEY 
+        - IBM cloud api key with necessary access as descriibed in the Pre-requisites section. Also See [Creating an API key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key)
     - BROKER_ICR_NAMESPACE_URL
       - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
       - eg. `us.icr.io/yournamespace`
@@ -94,7 +102,7 @@ The cli automation requires an IBM Container Registry namespace to be provided i
     - CE_PROJECT
       - Select project for code engine. Choose or create one from [code engine projects](https://cloud.ibm.com/codeengine/projects)
     - CE_REGISTRY_SECRET_NAME
-      - Select code engine registry access secret name where apikey for container registry is saved
+      - Select code engine registry access secret name where apikey for container registry is saved. Follow [step](https://TODO) to create the secret
   
     <br />
 
