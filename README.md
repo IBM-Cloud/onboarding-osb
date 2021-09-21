@@ -44,17 +44,18 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
 
         git clone https://github.com/IBM-Cloud/onboarding-osb.git
 
-2. Fill out the `build.config.properties` with the instructions provided below and export the file(s) to create OS environment variables 
+2. Fill out the 2 `build.config.properties` with the instructions provided below and export the file(s) to create OS environment variables 
 
    >   Note: If you do not want to export the properties as environment variables, the deploying will still work as long as the properties are set in this properties file(s):<br />
-    build: [deploy/build.config.properties](deploy/build.config.properties) <br />
-    code engine:[deploy/ce/ce.config.properties](deploy/ce/ce.config.properties)  OR 
-    cloud foundry:[deploy/cf/cf.config.properties](deploy/cf/cf.config.properties)
-
-
    > Note: Environment variables take precedence over properties set in the config.properties
 
-    ## Build Properties
+    - build properties:  [deploy/build.config.properties](deploy/build.config.properties) <br />
+    - deploy properties: 
+      - A. for code engine [deploy/ce/ce.config.properties](deploy/ce/ce.config.properties) 
+      - B. for cloud foundry [deploy/cf/cf.config.properties](deploy/cf/cf.config.properties)
+   
+
+    ## Build properties
 
     - ONBOARDING_ENV
       - Should be set to `stage` or `prod` based on whether the service is being onboarded to Staging RMC (used by first party services) or prod RMC and PC (used by third party services)
@@ -78,7 +79,8 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
     ## Deployment properties
     <br />
 
-    ### Code Engine deployment properties
+    ### A. Code Engine deployment properties
+    
     <br />
 
     - DEPLOYMENT_IAM_API_KEY 
@@ -94,19 +96,19 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
       - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
       - eg. `us.icr.io/yournamespace`
     - ICR_IMAGE
-      - Image name to push on namespace
-    - CE_REGION
-      - Set region for code engine deployment
-    - CE_RESOURCE_GROUP
-      - Select resource group to target for code engine
+      - Provide a unqiue image name to push on namespace
     - CE_PROJECT
-      - Select project for code engine. Choose or create one from [code engine projects](https://cloud.ibm.com/codeengine/projects)
+      - Select a project from the [list of available projects](https://cloud.ibm.com/codeengine/projects). You can also [create a new one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-manage-project#create-a-project). Note that you must have a selected project to deploy an app.
+    - CE_REGION
+      - Set region for code engine deployment. This is value in the `Location` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
+    - CE_RESOURCE_GROUP
+      - Select resource group to target for code engine. This is value in the  `Resource group` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
     - CE_REGISTRY_SECRET_NAME
-      - Select code engine registry access secret name where apikey for container registry is saved. Follow [step](https://TODO) to create the secret
+      - Select an exisitg registry access from your project or [create one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-add-registry#add-registry-access-ce)
   
     <br />
 
-    ### Cloud Foundry deployment properties
+    ### B. Cloud Foundry deployment properties
     <br />
 
     - DEPLOYMENT_IAM_API_KEY 
