@@ -35,7 +35,6 @@ jobs:
         run: |
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
-          echo "$GC_OBJECT_ID $DEPLOYMENT_IAM_API_KEY $ONBOARDING_ENV"
           make build
           made deploy-ce
         
