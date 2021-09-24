@@ -36,6 +36,7 @@ jobs:
           curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
+          echo "gc object id: ${GC_OBJECT_ID}"
           make build
           made deploy-ce
         
