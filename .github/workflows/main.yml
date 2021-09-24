@@ -33,6 +33,7 @@ jobs:
 
       - name: Populate environemnt
         run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
           make build
