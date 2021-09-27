@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "inside get_catalog_json";
+echo "gc_id: ${GC_OBJECT_ID}";
+
+
 echo "
 Getting Access Token"
 access_token_curl="`curl -X POST "https://iam.test.cloud.ibm.com/identity/token" --header 'Content-Type: application/x-www-form-urlencoded' --header 'Accept: application/json' --data-urlencode 'grant_type=urn:ibm:params:oauth:grant-type:apikey' --data-urlencode 'apikey='$ONBOARDING_IAM_API_KEY''`"
