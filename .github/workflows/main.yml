@@ -6,15 +6,6 @@ name: deploy-ce
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-      deploymentApiKey:
-        description: 'Deployment ApiKey'     
-        required: true
-        default: 'your apikey'
-      onboardingApiKey:
-        description: 'Onboarding ApiKey'     
-        required: true
-        default: 'your apikey'
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,8 +14,8 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      DEPLOYMENT_IAM_API_KEY: ${{ github.event.inputs.deploymentApiKey }}
-      ONBOARDING_ENV: ${{ github.event.inputs.onboardingApiKey }}
+      DEPLOYMENT_IAM_API_KEY: ${{ sercrets.DEPLOYMENT_IAM_API_KEY }}
+      ONBOARDING_ENV: ${{ secrets.ONBOARDING_ENV }}
       GC_OBJECT_ID: e4bb27d5-17b7-450d-af58-ae3e20c4aa93
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -34,10 +25,9 @@ jobs:
 
       - name: Populate environemnt
         run: |
-          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
-          echo "gc object id: ${GC_OBJECT_ID}"
+          echo "gc object id: ${GC_OBJECT_ID} ${DEPLOYMENT_IAM_API_KEY} ${ONBOARDING_ENV}"
           make build
           made deploy-ce
         
