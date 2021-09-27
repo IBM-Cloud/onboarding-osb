@@ -2,6 +2,10 @@
 
 echo ""
 echo "---------- Logging in cloudfoundry and ibmcloud ----------"
+
+BASE_BUILD="0.1"
+BUILD_NUMBER="$BASE_BUILD-`date +"%m-%d-%y"`"
+
 cf login -a $CF_API -u apikey -p $DEPLOYMENT_IAM_API_KEY -o $CF_ORGANIZATION -s $CF_SPACE;
 
 echo ""
@@ -10,6 +14,8 @@ CF_DOCKER_PASSWORD=$DEPLOYMENT_IAM_API_KEY cf push $APP_NAME --docker-image $BRO
 
 cf set-env $APP_NAME BROKER_USERNAME $BROKER_USERNAME
 cf set-env $APP_NAME BROKER_PASSWORD $BROKER_PASSWORD
+cf set-env $APP_NAME BUILD_NUMBER $BUILD_NUMBER
+
 RESULT="`cf start $APP_NAME`"
 if [[ $RESULT == *"running"* ]]; then
 	echo ""
