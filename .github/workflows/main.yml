@@ -16,7 +16,6 @@ jobs:
     env:
       DEPLOYMENT_IAM_API_KEY: ${{ secrets.DEPLOYMENT_IAM_API_KEY }}
       ONBOARDING_ENV: ${{ secrets.ONBOARDING_ENV }}
-      GC_OBJECT_ID: e4bb27d5-17b7-450d-af58-ae3e20c4aa93
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

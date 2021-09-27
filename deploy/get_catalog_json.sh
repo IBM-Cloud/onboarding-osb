@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "inside get_catalog_json";
-echo "gc_id: ${GC_OBJECT_ID}";
+echo "gc_id: ${GC_OBJECT_ID} $ONBOARDING_IAM_API_KEY";
 
 
 echo "
@@ -10,7 +10,7 @@ access_token_curl="`curl -X POST "https://iam.test.cloud.ibm.com/identity/token"
 access_token=`echo $access_token_curl | jq '.access_token'`
 access_token="${access_token%\"}"
 access_token="${access_token#\"}"
-echo "
+echo "$access_token
 Getting Catalog"
 gcjson="`curl -X GET 'https://globalcatalog.test.cloud.ibm.com/api/v1/'$GC_OBJECT_ID'?include=%2A&depth=100' -H 'accept: application/json' -H 'Authorization: Bearer '$access_token''`"
 
