@@ -26,6 +26,6 @@ jobs:
         run: |
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
-          made build-deploy-ce
+          make build-deploy-ce
         
 
