@@ -1,6 +1,8 @@
 {
 	"metadata": {
 	  "type": "public",
+	  "created": "2021-08-08T20:47:51.35Z",
+      "updated": "2021-09-10T20:47:51.35Z",
 	  "longDescription": "OSB Sample for partners onboarding products to IBM Cloud",
 	  "serviceKeysSupported": false,
 	  "displayName": "OSB Sample",
@@ -59,6 +61,7 @@
 		"id": "eeaf64b6-cee5-4f7e-ac94-57d34690301e",
 		"metadata": {
 		  "regional": false,
+		  "created": "2021-08-08T20:47:51.35Z",
 		  "allowInternalUsers": true,
 		  "displayName": "Lite plan",
 		  "bullets": [
@@ -91,6 +94,7 @@
 		"id": "d786d82e-2ff1-4b65-b5e0-1a30f856bfca",
 		"metadata": {
 		  "regional": false,
+		  "created": "2021-08-08T20:47:51.35Z",
 		  "allowInternalUsers": true,
 		  "displayName": "Paid plan1",
 		  "bullets": [

@@ -2,6 +2,7 @@
 
 echo ""
 echo "---------- Logging in ibmcloud ----------"
+ibmcloud config --check-version=false
 ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud target -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud ce project select -n $CE_PROJECT

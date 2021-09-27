@@ -1,14 +1,25 @@
 #!/bin/bash
+IAM_TEST_URL="https://iam.test.cloud.ibm.com/identity/token"
+IAM_PROD_URL="https://iam.cloud.ibm.com/identity/token"
+GC_TEST_URL="https://globalcatalog.test.cloud.ibm.com"
+GC_PROD_URL="https://globalcatalog.cloud.ibm.com"
 
-echo "
-Getting Access Token"
-access_token_curl="`curl -X POST "https://iam.test.cloud.ibm.com/identity/token" --header 'Content-Type: application/x-www-form-urlencoded' --header 'Accept: application/json' --data-urlencode 'grant_type=urn:ibm:params:oauth:grant-type:apikey' --data-urlencode 'apikey='$ONBOARDING_IAM_API_KEY''`"
+echo "Getting Access Token"
+echo "ONBOARDING ENV: $ONBOARDING_ENV"
+if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+	IAM_URL=$IAM_TEST_URL
+	GC_URL=$GC_TEST_URL
+else
+	IAM_URL=$IAM_PROD_URL
+	GC_URL=$GC_PROD_URL
+fi
+access_token_curl="`curl -X POST $IAM_URL --header 'Content-Type: application/x-www-form-urlencoded' --header 'Accept: application/json' --data-urlencode 'grant_type=urn:ibm:params:oauth:grant-type:apikey' --data-urlencode 'apikey='$ONBOARDING_IAM_API_KEY''`"
 access_token=`echo $access_token_curl | jq '.access_token'`
 access_token="${access_token%\"}"
 access_token="${access_token#\"}"
 echo "
 Getting Catalog"
-gcjson="`curl -X GET 'https://globalcatalog.test.cloud.ibm.com/api/v1/'$GC_OBJECT_ID'?include=%2A&depth=100' -H 'accept: application/json' -H 'Authorization: Bearer '$access_token''`"
+gcjson="`curl -X GET $GC_URL'/api/v1/'$GC_OBJECT_ID'?include=%2A&depth=100' -H 'accept: application/json' -H 'Authorization: Bearer '$access_token''`"
 
 check_json=`echo $gcjson | jq '.name'`
 if [ $check_json == null ];
