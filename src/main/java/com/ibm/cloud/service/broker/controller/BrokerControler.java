@@ -15,7 +15,6 @@
 package com.ibm.cloud.service.broker.controller;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -27,8 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -59,6 +60,9 @@ public class BrokerControler {
     @Autowired
     Catalog catalog;
 
+    @Value("${app.build.number}")
+    private String buildNumber;
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(BrokerControler.class);
 
 
@@ -73,20 +77,13 @@ public class BrokerControler {
         StringBuilder homepage = new StringBuilder();
         homepage.append("<html><body><h2>Broker Service is running !!</h2>")
         .append("Build number ::::: ")
-        .append("XYZ-BUILD-NUMBER")
-        .append("<br/>Deployed on ::::: ")
-        .append(Instant.now().toString())
-        .append(" GMT")
-        .append("<br/><br/><b>Service Catalog </b>")
-        .append("<br/>Service : ")
-        .append(getServiceName())
-        .append("<br> Plans : ")
-        .append(getPlans())
-        .append("<br/>")
-        .append("<br/>Update Broker URL in the Service Onboarding portal::::: ")
-        .append("<a href=\"https://test.cloud.ibm.com/onboarding/broker/test-osb\"> "
+        .append(buildNumber)
+        .append(getCatalogTable())
+        .append("<br/><br/><b>Update Broker URL in Service Onboarding portal: </b>")
+        .append("<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>RMC:</b> <a href=\"https://test.cloud.ibm.com/onboarding/broker/test-osb\"> "
                 + "https://test.cloud.ibm.com/onboarding/broker/test-osb </a>")
-        
+        .append("<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>PC:</b> <a href=\"https://test.cloud.ibm.com/partner-center/\"> "
+                + "https://test.cloud.ibm.com/partner-center/ </a>")
         .append(getInstances());
         return homepage.toString();
     }
@@ -294,26 +291,39 @@ public class BrokerControler {
 
     }
 
-    private String getServiceName() {
+
+    private StringBuilder getCatalogTable() {
+        StringBuilder catalogTable = new StringBuilder();
         if (catalog != null && catalog.getServiceDefinitions() != null && catalog.getServiceDefinitions().get(0) != null) {
-            return catalog.getServiceDefinitions().get(0).getName();
-        }
-        return null;
-    }
-    
-    private StringBuilder getPlans() {
-        StringBuilder plans = new StringBuilder();
-        if (catalog != null && catalog.getServiceDefinitions() != null && catalog.getServiceDefinitions().get(0) != null) {
+            catalogTable.append("<br/><br/><b>Service Catalog :</b>")
+            .append("<style>table, th, td {border: 1px solid black;} th, td {  padding: 10px;  }</style>")
+            .append("<table border=1><tr><th>Kind</th><th>Name</th><th>Id</th><th>Created</th><th>Updated</th></tr>")
+            .append("<tr><td>").append("Service").append("</td>")
+            .append("<td>").append(catalog.getServiceDefinitions().get(0).getName()).append("</td>")
+            .append("<td>").append(catalog.getServiceDefinitions().get(0).getId()).append("</td>")
+            .append("<td>").append(getMetaData(catalog.getServiceDefinitions().get(0).getMetadata(), "created")).append("</td>")
+            .append("<td>").append(getMetaData(catalog.getServiceDefinitions().get(0).getMetadata(), "updated")).append("</td></tr>");
+            
             for (Plan plan: catalog.getServiceDefinitions().get(0).getPlans()) {
-                plans.append(plan.getName())
-                .append(", ");
+                catalogTable.append("<tr><td>").append("Plan").append("</td>")
+                .append("<td>").append(plan.getName()).append("</td>")
+                .append("<td>").append(plan.getId()).append("</td>")
+                .append("<td>").append(getMetaData(plan.getMetadata(), "created")).append("</td>")
+                .append("<td>").append(getMetaData(plan.getMetadata(), "updated")).append("</td></tr>");
             }
+            catalogTable.append("</table>");
         }
-        plans.deleteCharAt(plans.lastIndexOf(","));
-        return plans;
+        return catalogTable;
     }
-    
+
+    private String getMetaData(Map<String, Object> metadata, String input) {
+        if (metadata != null && metadata.containsKey(input)) {
+            return metadata.get(input).toString();
+        }
+        return "";
+    }
+
     private StringBuilder getInstances() throws Exception {
-    	return brokerService.getServiceInstances();
+        return brokerService.getServiceInstances();
     }
 }
