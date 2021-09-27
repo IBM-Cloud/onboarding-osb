@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "inside get_catalog_json";
-echo "gc_id: ${GC_OBJECT_ID} $ONBOARDING_IAM_API_KEY";
+echo "gc_id: ${GC_OBJECT_ID} >>>${ONBOARDING_IAM_API_KEY}<<<";
 
 
 echo "

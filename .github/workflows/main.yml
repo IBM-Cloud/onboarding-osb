@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEPLOYMENT_IAM_API_KEY: ${{ secrets.DEPLOYMENT_IAM_API_KEY }}
-      ONBOARDING_ENV: ${{ secrets.ONBOARDING_ENV }}
+      ONBOARDING_IAM_API_KEY: ${{ secrets.ONBOARDING_IAM_API_KEY }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -26,7 +26,7 @@ jobs:
         run: |
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
-          echo "gc object id: ${GC_OBJECT_ID} ${DEPLOYMENT_IAM_API_KEY} ${ONBOARDING_ENV}"
+          echo "gc object id: ${GC_OBJECT_ID} ${DEPLOYMENT_IAM_API_KEY} ${ONBOARDING_IAM_API_KEY}"
           make build
           made deploy-ce
         
