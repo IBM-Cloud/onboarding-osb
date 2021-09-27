@@ -22,7 +22,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Populate environemnt
+      - name: Build and deploy to Code Engine
         run: |
           export $(cat deploy/build.config.properties)
           export $(cat deploy/ce/ce.config.properties)
