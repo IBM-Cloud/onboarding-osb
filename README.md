@@ -73,6 +73,10 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
       - eg. `us.icr.io/yournamespace`
     - ICR_IMAGE
       - Image name to push on namespace
+    - ICR_NAMESPACE_REGION
+      - Region for namespace
+    - ICR_RESOURCE_GROUP
+      - Resource group for namespace
   
     <br />
 
