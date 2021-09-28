@@ -81,7 +81,8 @@ build-deploy-cf:
 	@./deploy/docker_login.sh
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
-	$(MAKE) cleanup
+	$(MAKE) cleanup-build
+	$(MAKE) cleanup-deploy-cf
 
 build-deploy-ce:
 	$(MAKE) init || $(MAKE) init-error
@@ -92,7 +93,8 @@ build-deploy-ce:
 	@./deploy/docker_login.sh 
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
-	$(MAKE) cleanup
+	$(MAKE) cleanup-build
+	$(MAKE) cleanup-deploy-ce
 
 # Helper Goals
 
