@@ -3,8 +3,7 @@
 echo ""
 echo "---------- Logging in cloudfoundry and ibmcloud ----------"
 
-BASE_BUILD="0.1"
-BUILD_NUMBER="$BASE_BUILD-`date +"%m-%d-%y"`"
+BUILD_NUMBER=`./deploy/generate_build_number.sh`
 
 cf login -a $CF_API -u apikey -p $DEPLOYMENT_IAM_API_KEY -o $CF_ORGANIZATION -s $CF_SPACE;
 

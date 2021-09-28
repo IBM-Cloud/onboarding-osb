@@ -3,8 +3,7 @@
 echo ""
 echo "---------- Logging in ibmcloud ----------"
 
-BASE_BUILD="0.1"
-BUILD_NUMBER="$BASE_BUILD-`date +"%m-%d-%y"`"
+BUILD_NUMBER=`./deploy/generate_build_number.sh`
 
 ibmcloud config --check-version=false
 ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP
