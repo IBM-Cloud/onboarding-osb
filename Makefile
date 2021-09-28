@@ -200,21 +200,21 @@ cleanup:
 
 cleanup-build:
 	@echo  ......cleaning up after build
-	@sudo docker container stop osb-container-catalog > /dev/null
-	@sudo docker container rm osb-container-catalog > /dev/null
-	@sudo docker container stop osb-container-build > /dev/null
-	@sudo docker container rm osb-container-build > /dev/null
-	@sudo docker container stop osb-container-namespace > /dev/null
-	@sudo docker container rm osb-container-namespace > /dev/null
+	@sudo docker container stop osb-container-catalog > /dev/null || echo "--- clear"
+	@sudo docker container rm osb-container-catalog > /dev/null || echo "--- clear"
+	@sudo docker container stop osb-container-namespace > /dev/null || echo "--- clear"
+	@sudo docker container rm osb-container-namespace > /dev/null || echo "--- clear"
+	@sudo docker container stop osb-container-build > /dev/null || echo "--- clear"
+	@sudo docker container rm osb-container-build > /dev/null || echo "--- clear"
 
 cleanup-deploy-cf:
 	@echo  ......cleaning up after deploy
-	@sudo docker container stop osb-container-deploy-cf > /dev/null
-	@sudo docker container rm osb-container-deploy-cf > /dev/null
+	@sudo docker container stop osb-container-deploy-cf > /dev/null || echo "--- clear"
+	@sudo docker container rm osb-container-deploy-cf > /dev/null || echo "--- clear"
 
 cleanup-deploy-ce:
 	@echo  ......cleaning up after deploy
-	@sudo docker container stop osb-container-deploy-ce > /dev/null
-	@sudo docker container rm osb-container-deploy-ce > /dev/null
+	@sudo docker container stop osb-container-deploy-ce > /dev/null || echo "--- clear"
+	@sudo docker container rm osb-container-deploy-ce > /dev/null || echo "--- clear"
 
 .PHONY: all	build deploy deploy-cf build-deploy-cf get-catalog cleanup init
