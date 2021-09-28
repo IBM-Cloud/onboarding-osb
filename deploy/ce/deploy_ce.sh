@@ -2,6 +2,9 @@
 
 echo ""
 echo "---------- Logging in ibmcloud ----------"
+
+BUILD_NUMBER=`./deploy/generate_build_number.sh`
+
 ibmcloud config --check-version=false
 ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud target -r $CE_REGION -g $CE_RESOURCE_GROUP
@@ -34,12 +37,12 @@ if [[ $APP_EXISTS == *"OK"* ]]; then
 	echo "Found
 Updating Application
 This might take some time...";
-	RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --rs $CE_REGISTRY_SECRET_NAME`
+	RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
 else
 	echo "Do not terminate...
 Creating new application...
 This might take some time...";
-	RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --rs $CE_REGISTRY_SECRET_NAME`
+	RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
 fi
 
 if [[ $RESULT == *"OK"* ]]; then
