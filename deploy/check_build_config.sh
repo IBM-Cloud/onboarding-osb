@@ -31,6 +31,8 @@ then
 	echo ""
 	echo "*******************************************************************************"
 	echo "secrets not set !" ;
+	echo "make sure these values are provided!" ;
+	echo "DEPLOYMENT_IAM_API_KEY, ONBOARDING_IAM_API_KEY" ;
 	echo "refer README to set values" ;
 	echo "Exiting..." ;
 	echo "*******************************************************************************"
