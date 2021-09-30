@@ -37,7 +37,7 @@ get-catalog:
 	@echo "Getting catalog.json"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-catalog osb-img
+	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
 
 build:
 	$(MAKE) init || $(MAKE) init-error
@@ -124,7 +124,7 @@ build-job:
 	@echo "Building and pushing image to ibm container registry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-namespace osb-img
+	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
 	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-build osb-img
 	@./deploy/build_image.sh $(shell pwd)
 
@@ -135,7 +135,7 @@ deploy-job-cf:
 	@echo "Deploying image to cloudfoundry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties --name osb-container-deploy-cf osb-img
+	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties  -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-deploy-cf osb-img
 
 deploy-job-ce:
 	@echo  starting deploy...
@@ -146,7 +146,7 @@ deploy-job-ce:
 	@echo ""
 	@./deploy/ce/ce_export_env.sh
 	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties --name osb-container-deploy-ce osb-img
+	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:
 	@./deploy/build_export_env.sh
