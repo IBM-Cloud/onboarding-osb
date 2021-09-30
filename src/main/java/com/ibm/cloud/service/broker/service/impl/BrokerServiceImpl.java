@@ -77,6 +77,7 @@ public class BrokerServiceImpl implements BrokerService {
     
     private static final String INSTANCE_STATE = "state";
     
+    private static final String PROVISION_STATUS_API = "/provision_status/";
 
     @Override
     public ResponseEntity<String> provision(String instanceId, JsonNode json, String iamId, String region) throws Exception {
@@ -95,7 +96,7 @@ public class BrokerServiceImpl implements BrokerService {
                 serviceInstanceRepository.save(serviceInstance);
                 LOGGER.info("Service Instance created: instanceId: {} status: {} planId: {}", instanceId,
                         serviceInstance.getStatus(), plan.getId());
-                response.put(BrokerUtil.DASHBOARD_URL, dashboardUrl);
+                response.put(BrokerUtil.DASHBOARD_URL, dashboardUrl + PROVISION_STATUS_API + instanceId);
             } else {
                 LOGGER.error("Plan id:{} does not belong to this service: {}", createServiceRequest.getPlanId(), createServiceRequest.getServiceId());
                 return ResponseEntity.status(422).body("Invalid plan id: " + createServiceRequest.getPlanId());

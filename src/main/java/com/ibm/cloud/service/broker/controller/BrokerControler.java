@@ -76,7 +76,7 @@ public class BrokerControler {
         LOGGER.info("GET / request headers: " + headersString(httpServletRequest));
         StringBuilder homepage = new StringBuilder();
         homepage.append("<html><body><h2>Broker Service is running !!</h2>")
-        .append("Build number ::::: ")
+        .append("Build Number : ")
         .append(buildNumber)
         .append(getCatalogTable())
         .append("<br/><br/><b>Update Broker URL in Service Onboarding portal: </b>")
@@ -291,6 +291,10 @@ public class BrokerControler {
 
     }
 
+    @GetMapping("provision_status/{instanceId}")
+    public ResponseEntity<String> getProvisionStatus(@PathVariable("instanceId")  final String instanceId) {
+    	return ResponseEntity.status(HttpStatus.OK).body("Successfully Provisioned the Instance");
+    }
 
     private StringBuilder getCatalogTable() {
         StringBuilder catalogTable = new StringBuilder();
