@@ -30,18 +30,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${service.broker.password}")
     private String pass;
+    
+    private static final String[] OPEN_URLS = {"/provision_status/**"};
+    private static final String AUTH_URL = "/**";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
          http
              .csrf().disable()
-             .authorizeRequests().antMatchers("/**").authenticated()
-             .and()
-             .httpBasic();
+             .antMatcher(AUTH_URL).httpBasic().and().authorizeRequests()
+             .antMatchers(OPEN_URLS).permitAll().anyRequest().authenticated();
+
          //  Remove this line when h2 console not needed
-            http.headers().frameOptions().disable();
-        
+         http.headers().frameOptions().disable();
     }
     
     @Autowired
