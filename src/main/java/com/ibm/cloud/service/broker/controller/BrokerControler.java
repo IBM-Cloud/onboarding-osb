@@ -291,9 +291,9 @@ public class BrokerControler {
 
     }
 
-    @GetMapping("provision_status}")
+    @GetMapping("provision_status")
     public ResponseEntity<String> getProvisionStatus() {
-    	return ResponseEntity.status(HttpStatus.OK).body("Successfully Provisioned the Instance");
+    	return ResponseEntity.status(HttpStatus.OK).body("Successfully Provisioned the Instance !!");
     }
 
     private StringBuilder getCatalogTable() {
