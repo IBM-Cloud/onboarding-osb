@@ -64,10 +64,6 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
       - Service ID defined in RMC for your service
         - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section.
         - Example: RMC summary for test-osb service: `https://test.cloud.ibm.com/onboarding/summary/[your-service]`
-    - ONBOARDING_IAM_API_KEY
-      - Api key to access test Global Catalog api
-    - DEPLOYMENT_IAM_API_KEY 
-        - IBM cloud api key with necessary access as descriibed in the Pre-requisites section. Also See [Creating an API key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key)
     - BROKER_ICR_NAMESPACE_URL
       - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
       - eg. `us.icr.io/yournamespace`
@@ -87,8 +83,6 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
     
     <br />
 
-    - DEPLOYMENT_IAM_API_KEY 
-      - IBM cloud api key with necessary access as descriibed in the Pre-requisites section. Also See [Creating an API key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key)
     - APP_NAME
       - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundary application. Try using a unique indentifier in the name so that you dont run into conflicts.  
     - BROKER_USERNAME
@@ -115,8 +109,6 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
     ### B. Cloud Foundry deployment properties
     <br />
 
-    - DEPLOYMENT_IAM_API_KEY 
-      - IBM cloud api key with necessary access as descriibed in the Pre-requisites section. Also See [Creating an API key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key)
     - APP_NAME
       - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundary application. Try using a unique indentifier in the name so that you dont run into conflicts.  
     - BROKER_USERNAME
@@ -154,37 +146,44 @@ The CLI automation requires an IBM Container Registry namespace to be provided i
 
 3. Building and deploying the broker 
 
-      - Step 1: Build the broker project, create a docker image and push to IBM Container Registry
+      To build and deploy the broker, we need to provide the IBM Cloud API keys of the cloud account where the service is being onboarded `ONBOARDING_IAM_API_KEY` and of the cloud account where the broker is to be deployed `DEPLOYMENT_IAM_API_KEY`    
 
-        `make build`
-        <!-- - build and push image on icr. -->
-        <!-- - requires following env variables to be set: 
-          - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, GC_OBJECT_ID, ONBOARDING_IAM_API_KEY -->
+      - ONBOARDING_IAM_API_KEY
+        - Api key  of the cloud account where the service is being onboarded. This is used to access test Global Catalog api
+      - DEPLOYMENT_IAM_API_KEY 
+          - IBM cloud api key of the cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. Also See [Creating an API key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key)
 
-      - Step 2: Deploy the image on Cloud Foundry or Code Engine
+    - Step 1: Build the broker project, create a docker image and push to IBM Container Registry
+
+      `DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey make build`
+      <!-- - build and push image on icr. -->
+      <!-- - requires following env variables to be set: 
+        - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, GC_OBJECT_ID, ONBOARDING_IAM_API_KEY -->
+
+    - Step 2: Deploy the image on Cloud Foundry or Code Engine
+    
+      `DEPLOYMENT_IAM_API_KEY=your-deployment-apikey  make deploy-cf `
+
+      <!-- - deploy image on cloud foundry. -->
+      <!-- - requires the following env variables to be set: 
+        - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, CF_API, APP_NAME, CF_ORGANIZATION, CF_SPACE -->
+
+      #### OR
+
       
-	      `make deploy-cf`
-		
-        <!-- - deploy image on cloud foundry. -->
-        <!-- - requires the following env variables to be set: 
-          - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, CF_API, APP_NAME, CF_ORGANIZATION, CF_SPACE -->
+      `DEPLOYMENT_IAM_API_KEY=your-deployment-apikey make deploy-ce`
 
-        #### OR
+      <!-- - deploy image on code engine. -->
+      <!-- - requires the following env variables to be set: 
+        - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, APP_NAME, CE_REGION, CE_RESOURCE_GROUP, CE_PROJECT, CE_REGISTRY_SECRET_NAME -->
+    
+      Alternately, Steps 1 and 2 can be run as a single command to build and deploy the broker to cloud foundary or code engine  
 
-        
-	      `make deploy-ce`
-		
-        <!-- - deploy image on code engine. -->
-        <!-- - requires the following env variables to be set: 
-          - BROKER_ICR_NAMESPACE_URL, DEPLOYMENT_IAM_API_KEY, APP_NAME, CE_REGION, CE_RESOURCE_GROUP, CE_PROJECT, CE_REGISTRY_SECRET_NAME -->
-			
-        Alternately, Steps 1 and 2 can be run as a single command to build and deploy the broker to cloud foundary or code engine  
-   
-        `make build-deploy-cf`
-        - make build + make deploy-cf
-  
-        `make build-deploy-ce`
-        - make build + make deploy-ce
+      `DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-cf`
+      - make build + make deploy-cf
+
+      `DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-ce`
+      - make build + make deploy-ce
 
 
 <!-- ## Deploying the Broker to Cloud Foundry from Windows
