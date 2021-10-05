@@ -40,7 +40,15 @@ for row in $(echo "${children_array}" | jq -r '.[] | @base64'); do
 	_jq() {
 	echo ${row} | base64 --decode | jq -r ${1}
 	}
-	plan='{"name":"'$(_jq '.name')'","id":"'$(_jq '.id')'","description":"'$(_jq '.overview_ui.en.description')'","paid":true}'
+	plan_pricing_type="$(_jq '.metadata.pricing.type')"
+	plan_type_free=""
+	if [[ $plan_pricing_type == *"free"* ]]; then
+		plan_type_free=true
+	else
+		plan_type_free=false
+	fi
+	plan_metadata='{"created":"'$(_jq '.created')'","updated":"'$(_jq '.updated')'"}'
+	plan='{"name":"'$(_jq '.name')'","id":"'$(_jq '.id')'", "metadata":'$plan_metadata', "description":"'$(_jq '.overview_ui.en.description')'","paid":'$plan_type_free'}'
 	if [ $firstflag == true ]
 	then
 		plan_array+="$plan"
@@ -52,7 +60,7 @@ done
 
 plans_gen=[$plan_array]
 
-metadata_gen='{"type":'`echo $gcjson | jq '.visibility.restrictions'`',"longDescription":'`echo $gcjson | jq '.overview_ui.en.long_description'`',"displayName":'`echo $gcjson | jq '.overview_ui.en.display_name'`',"imageUrl":'`echo $gcjson | jq '.images.image'`',"featuredImageUrl":'`echo $gcjson | jq '.images.feature_image'`',"smallImageUrl":'`echo $gcjson | jq '.images.small_image'`',"mediumImageUrl":'`echo $gcjson | jq '.images.medium_image'`',"documentationUrl":'`echo $gcjson | jq '.metadata.ui.urls.doc_url'`',"termsUrl":'`echo $gcjson | jq '.metadata.ui.urls.terms_url'`', "instructionsUrl":'`echo $gcjson | jq '.metadata.ui.urls.instructions_url'`', "parameters": '`echo $gcjson | jq '.metadata.service.parameters'`'}'
+metadata_gen='{"type":'`echo $gcjson | jq '.visibility.restrictions'`',"longDescription":'`echo $gcjson | jq '.overview_ui.en.long_description'`',"displayName":'`echo $gcjson | jq '.overview_ui.en.display_name'`',"imageUrl":'`echo $gcjson | jq '.images.image'`',"featuredImageUrl":'`echo $gcjson | jq '.images.feature_image'`',"smallImageUrl":'`echo $gcjson | jq '.images.small_image'`',"mediumImageUrl":'`echo $gcjson | jq '.images.medium_image'`',"documentationUrl":'`echo $gcjson | jq '.metadata.ui.urls.doc_url'`',"termsUrl":'`echo $gcjson | jq '.metadata.ui.urls.terms_url'`', "instructionsUrl":'`echo $gcjson | jq '.metadata.ui.urls.instructions_url'`', "parameters": '`echo $gcjson | jq '.metadata.service.parameters'`', "created": '`echo $gcjson | jq '.created'`', "updated": '`echo $gcjson | jq '.updated'`'}'
 
 main_json='{
 	"metadata":'$metadata_gen',
