@@ -2,7 +2,7 @@
 # Open Service Broker Reference App
 
 ## Overview
-The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows services trying to onboard to the IBM Cloud catalog to quickly spin up a broker that is preconfigured with the service. 
+The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows services trying to onboard to the IBM Cloud catalog to quickly spin up a broker that is pre-configured with the service. 
 
 There are 2 way to onboard a service in the IBM Cloud catalog: 
   - the traditional [Staging Resource Management Console](https://cloud.ibm.com/onboarding/dashboard)  
@@ -15,19 +15,19 @@ During the onboarding process, you will be required to provide your broker URL. 
  - upload it to IBM Container Registry 
  - deploy the app on either IBM Cloud Foundry or IBM Code Engine using the OSB container image 
 
-## Pre-requisites
+## Prerequisites
 
 
 
 1.  [Docker](https://docs.docker.com/engine/install/) setup locally on your computer
-2. The following privliges are required 
+2. The following privileges are required 
     1. Be a contributor in RMC if onboarding using RMC 
-    2. Be a user in IBM Cloud account where the service is being onboarded
+    2. Be a user in IBM Cloud account where the service is being on-boarded
     3. Writer and Editor access to IBM Container Registry
     4. Editor access to IBM Cloud Foundry or Code Engine
     5. Added to the service in the [Global catalog](https://globalcatalog.cloud.ibm.com) (via the Visibility tab in the UI)
 
->  Note: The broker need not be deployed on the same IBM Cloud account as the account on which the service is being onboarded.
+>  Note: The broker need not be deployed on the same IBM Cloud account as the account on which the service is being on-boarded.
 
 3. IBM Container Registry namespace
 
@@ -37,10 +37,10 @@ During the onboarding process, you will be required to provide your broker URL. 
     The project expects 2 IBM Cloud API keys 
 
     - ONBOARDING_IAM_API_KEY
-      Api key of the cloud account where the service is being onboarded. This is used to access test Global Catalog api
+      API key of the cloud account where the service is being onboarded. This is used to access test Global Catalog API
       
     - DEPLOYMENT_IAM_API_KEY
-      IBM cloud api key of the cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. 
+      IBM cloud API key of the cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. 
       
       You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys
 
@@ -61,7 +61,7 @@ During the onboarding process, you will be required to provide your broker URL. 
 
 
   - ONBOARDING_ENV
-    - Can be set to either `stage` or `prod` based on whether the service is being onboarded  using the staging   (used internally by IBMers only) or production environments
+    - Can be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
   - GC_OBJECT_ID
     <!-- - To fetch catalog.json -->
     - This value can be found in the Brokers tab in Partner  Center. 
@@ -88,21 +88,17 @@ During the onboarding process, you will be required to provide your broker URL. 
 ### 4. Build the broker:
 
     DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey make build
-    
-  Builds the broker project, creates a container image and push to IBM Container Registry
-
-## Deploying the Broker
-
-The project supports 2 deployment platforms via its automation - IBM Cloud Code Engine and IBM Cloud Foundary. Based on the platform you choose please fill out the appropriate properties file
-
-
-  ### Code Engine 
-  #### 1. Fill out the [`deploy/ce/ce.config.properties`](deploy/ce/ce.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables    <br />
   
-  <br />
+*Congratulations!* We now have the broker application image.  
+The automation did a maven build on the broker application, created a container image and push it to IBM Container Registry. Log in to IBM Cloud and look under ICR namespaces to find your image. 
 
+Our next step now is to deploy the broker application image we just created. The CLI tool we provide has 2 supported deployment platforms - [IBM Cloud Code Engine](https://www.ibm.com/cloud/code-engine) and [IBM Cloud Foundry](https://www.ibm.com/cloud/cloud-foundry). Based on the platform of your choice, just to the next appropriate section section
+
+## Deploying the Broker on IBM Cloud Code Engine
+
+### 1. Fill out the [`deploy/ce/ce.config.properties`](deploy/ce/ce.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables.   
   - APP_NAME
-    - Application name for the broker on Code Engine  Try using a unique indentifier in the name so that you dont run into conflicts.  
+    - Application name for the broker on Code Engine  Try using a unique identifier in the name so that you dont run into conflicts.  
   - BROKER_USERNAME
     - Set a username for the Broker API
   - BROKER_PASSWORD
@@ -125,25 +121,23 @@ The project supports 2 deployment platforms via its automation - IBM Cloud Code 
 
 
     
-  #### 2. Set the variables in your environment using:
+### 2. Set the variables in your environment
 
     export code engine config properties:
       export $(cat deploy/ce/ce.config.properties)
 
-  #### 3. Deploy to ce:
+### 3. Deploy to ce
 
     DEPLOYMENT_IAM_API_KEY=your-deployment-apikey make deploy-ce
 
+<br/>
 
+## Deploying the Broker on IBM Cloud Foundry
 
-  <br />
-
-  ### Cloud Foundry 
-  #### 1. Fill out the [`deploy/cf/config.properties`](deploy/cf/build.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables    <br />
-  <br />
+### 1. Fill out the [`deploy/cf/config.properties`](deploy/cf/build.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables    <br />
 
   - APP_NAME
-    - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundary application. Try using a unique indentifier in the name so that you dont run into conflicts.  
+    - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundry application. Try using a unique identifier in the name so that you dont run into conflicts.  
   - BROKER_USERNAME
     - Set a username for the Broker API
   - BROKER_PASSWORD
@@ -155,41 +149,41 @@ The project supports 2 deployment platforms via its automation - IBM Cloud Code 
   - ICR_IMAGE
     - Image name to push on namespace
   - CF_API
-    - Cloudfoundry api endpoint. See list of available endpoints [here](https://ondeck.console.cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-ts-cf-apps)
+    - Cloudfoundry API endpoint. See list of available endpoints [here](https://ondeck.console.cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-ts-cf-apps)
   - CF_ORGANIZATION
     - Name of organization to be targeted for deployment. Your orgs can be found [here](https://cloud.ibm.com/account/cloud-foundry)
   - CF_SPACE
-    -  Name of space to be targeted for deployment. After selecting your Org [here](https://cloud.ibm.com/account/cloud-foundry), a list of available spaces can be seen
+    -  Name of space to be targeted for deployment. After selecting your Org [here](https://cloud.ibm.com/account/cloud-foundry), a list of available spaces can be seen.
 
   
       <br />
 
-  ### 2. Set the variables in your environment using:
+### 2. Set the variables in your environment
     export code engine config properties:
       export $(cat deploy/cf/cf.config.properties)
 
-  ### 3. Deploy to cf:
+### 3. Deploy to cf
 
     DEPLOYMENT_IAM_API_KEY=your-deployment-apikey  make deploy-cf 
 
-  Deploys the broker on IBM Cloud Foundary 
+  Deploys the broker on IBM Cloud Foundry 
 
 
   <br />
 
-### Building and deploying in a single command 
+## Building and deploying in a single command 
 
-  The broker be build and deployed in a single command to cloud foundary or code engine  
+The CLI tool also provides a single command that both builds and dpeloys the the broker app   
   
-  make build + make deploy-cf:
+  For Cloud Foundry:
 
     DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-cf
   
-make build + make deploy-cf:
+ For Code Engine:
 
     DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-ce
 
-  - make build + make deploy-ce
+  
 
 
 <!-- ## Deploying the Broker to Cloud Foundry from Windows
@@ -231,7 +225,7 @@ make build + make deploy-cf:
  
 
 ## Testing the broker
-- Download the [postman_collection.json](postman_collection.json) and import into your postman to test out the apis
+- Download the [postman_collection.json](postman_collection.json) and import into your postman to test out the APIs
 - Modify the planID and ServiceID in the postman collection to match your service
 
 <!-- ## Register the broker in RMC and download the catalog.json
