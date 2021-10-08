@@ -25,7 +25,7 @@ else
 		echo "$LOGIN_RESULT"
 		echo ""
 	fi
-	REGION_RESULT=`ibmcloud target -r $ICR_NAMESPACE_REGION`
+	REGION_RESULT=`ibmcloud target -r $ICR_NAMESPACE_REGION -g $ICR_RESOURCE_GROUP`
 	if [[ $REGION_RESULT == *"FAILED"* ]]; then
 		echo "$REGION_RESULT"
 		echo "Error with ibmcloud region. check the logs above."

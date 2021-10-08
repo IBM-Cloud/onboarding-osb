@@ -124,7 +124,7 @@ build-job:
 	@echo "Building and pushing image to ibm container registry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
+	# @sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
 	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-build osb-img
 	@./deploy/build_image.sh $(shell pwd)
 
@@ -204,8 +204,8 @@ cleanup-build:
 	@echo  ......cleaning up after build
 	@sudo docker container stop osb-container-catalog > /dev/null || echo "--- clear"
 	@sudo docker container rm osb-container-catalog > /dev/null || echo "--- clear"
-	@sudo docker container stop osb-container-namespace > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-namespace > /dev/null || echo "--- clear"
+	# @sudo docker container stop osb-container-namespace > /dev/null || echo "--- clear"
+	# @sudo docker container rm osb-container-namespace > /dev/null || echo "--- clear"
 	@sudo docker container stop osb-container-build > /dev/null || echo "--- clear"
 	@sudo docker container rm osb-container-build > /dev/null || echo "--- clear"
 
