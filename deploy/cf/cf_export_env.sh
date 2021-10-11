@@ -30,5 +30,4 @@ BROKER_ICR_NAMESPACE_URL=$(getVar BROKER_ICR_NAMESPACE_URL)
 ICR_IMAGE=$(getVar ICR_IMAGE)
 CF_API=$(getVar CF_API)
 CF_ORGANIZATION=$(getVar CF_ORGANIZATION)
-CF_SPACE=$(getVar CF_SPACE)
-" > deploy/cf/cf.config.properties
+CF_SPACE=$(getVar CF_SPACE)" > deploy/cf/cf.config.properties

@@ -4,17 +4,17 @@ all:
 	@echo "	make build"
 	@echo "		build and push image on icr."
 	@echo "		required env variables: "
-	@echo "		 BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, DEPLOYMENT_IAM_API_KEY, GC_OBJECT_ID, ONBOARDING_IAM_API_KEY"
+	@echo "		 ONBOARDING_ENV, GC_OBJECT_ID, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, ICR_NAMESPACE_REGION, ICR_RESOURCE_GROUP"
 	@echo ""
 	@echo "	make deploy-cf"
 	@echo "		deploy image on cloud foundry."
 	@echo "		required env variables: "
-	@echo "		 BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, DEPLOYMENT_IAM_API_KEY, CF_API, APP_NAME, CF_ORGANIZATION, CF_SPACE"
+	@echo "		 APP_NAME ,BROKER_USERNAME ,BROKER_PASSWORD ,BROKER_ICR_NAMESPACE_URL ,ICR_IMAGE ,CF_API ,CF_ORGANIZATION ,CF_SPACE"
 	@echo ""
 	@echo "	make deploy-ce"
 	@echo "		deploy image on code engine."
 	@echo "		required env variables: "
-	@echo "		 BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, DEPLOYMENT_IAM_API_KEY, APP_NAME, CE_REGION, CE_RESOURCE_GROUP, CE_PROJECT, CE_REGISTRY_SECRET_NAME"
+	@echo "		 APP_NAME, BROKER_USERNAME, BROKER_PASSWORD, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, CE_PROJECT, CE_REGION, CE_RESOURCE_GROUP, CE_REGISTRY_SECRET_NAME"
 	@echo ""
 	@echo "	make build-deploy-cf"
 	@echo "		make build + make deploy-cf."
@@ -135,7 +135,7 @@ deploy-job-cf:
 	@echo "Deploying image to cloudfoundry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties  -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-deploy-cf osb-img
+	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties  -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
 
 deploy-job-ce:
 	@echo  starting deploy...
@@ -146,7 +146,7 @@ deploy-job-ce:
 	@echo ""
 	@./deploy/ce/ce_export_env.sh
 	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-deploy-ce osb-img
+	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:
 	@./deploy/build_export_env.sh
@@ -199,24 +199,33 @@ cleanup:
 	$(MAKE) cleanup-build
 	$(MAKE) cleanup-deploy-cf
 	$(MAKE) cleanup-deploy-ce
+	@echo "Full cleanup done."
 
 cleanup-build:
 	@echo  ......cleaning up after build
-	@sudo docker container stop osb-container-catalog > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-catalog > /dev/null || echo "--- clear"
-	@sudo docker container stop osb-container-namespace > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-namespace > /dev/null || echo "--- clear"
-	@sudo docker container stop osb-container-build > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-build > /dev/null || echo "--- clear"
+	@sudo docker container stop osb-container-catalog > /dev/null || $(MAKE) skip-message
+	@sudo docker container rm osb-container-catalog > /dev/null || $(MAKE) skip-message
+	# @sudo docker container stop osb-container-namespace > /dev/null || $(MAKE) skip-message
+	# @sudo docker container rm osb-container-namespace > /dev/null || $(MAKE) skip-message
+	@sudo docker container stop osb-container-build > /dev/null || $(MAKE) skip-message
+	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
+	@echo "Done."
 
 cleanup-deploy-cf:
-	@echo  ......cleaning up after deploy
-	@sudo docker container stop osb-container-deploy-cf > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-deploy-cf > /dev/null || echo "--- clear"
+	@echo  ......cleaning up after cf deploy
+	@sudo docker container stop osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
+	@sudo docker container rm osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
+	@echo "Done."
 
 cleanup-deploy-ce:
-	@echo  ......cleaning up after deploy
-	@sudo docker container stop osb-container-deploy-ce > /dev/null || echo "--- clear"
-	@sudo docker container rm osb-container-deploy-ce > /dev/null || echo "--- clear"
+	@echo  ......cleaning up after ce deploy
+	@sudo docker container stop osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
+	@sudo docker container rm osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
+	@echo "Done."
+
+skip-message:
+	@echo 
+	@echo Already clean. skipping.
+	@echo
 
 .PHONY: all	build deploy deploy-cf build-deploy-cf get-catalog cleanup init
