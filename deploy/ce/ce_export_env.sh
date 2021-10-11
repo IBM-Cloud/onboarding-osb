@@ -32,5 +32,4 @@ ICR_IMAGE=$(getVar ICR_IMAGE)
 CE_PROJECT=$(getVar CE_PROJECT)
 CE_REGION=$(getVar CE_REGION)
 CE_RESOURCE_GROUP=$(getVar CE_RESOURCE_GROUP)
-CE_REGISTRY_SECRET_NAME=$(getVar CE_REGISTRY_SECRET_NAME)
-" > deploy/ce/ce.config.properties
+CE_REGISTRY_SECRET_NAME=$(getVar CE_REGISTRY_SECRET_NAME)" > deploy/ce/ce.config.properties
