@@ -205,8 +205,8 @@ cleanup-build:
 	@echo  ......cleaning up after build
 	@sudo docker container stop osb-container-catalog > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-catalog > /dev/null || $(MAKE) skip-message
-	# @sudo docker container stop osb-container-namespace > /dev/null || $(MAKE) skip-message
-	# @sudo docker container rm osb-container-namespace > /dev/null || $(MAKE) skip-message
+	@sudo docker container stop osb-container-namespace > /dev/null || $(MAKE) skip-message
+	@sudo docker container rm osb-container-namespace > /dev/null || $(MAKE) skip-message
 	@sudo docker container stop osb-container-build > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
 	@echo "Done."

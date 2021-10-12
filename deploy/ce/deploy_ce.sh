@@ -5,17 +5,17 @@ echo "---------- Logging in ibmcloud ----------"
 
 BUILD_NUMBER=`./deploy/generate_build_number.sh`
 
+./deploy/ce/handle_ce_project.sh
+
 ibmcloud config --check-version=false
 ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud target -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud ce project select -n $CE_PROJECT
 
-
 echo ""
 echo "---------- Checking in ce registry secret ----------"
 
 GET_CE_REG=`ibmcloud ce registry get -n $CE_REGISTRY_SECRET_NAME`
-
 
 if [[ $GET_CE_REG == *"OK"* ]]; then
 	echo "updating $CE_REGISTRY_SECRET_NAME...";
