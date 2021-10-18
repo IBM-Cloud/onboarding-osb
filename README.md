@@ -42,7 +42,7 @@ During the onboarding process, you will be required to provide your broker URL. 
     - DEPLOYMENT_IAM_API_KEY
       IBM cloud API key of the cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. 
       
-      You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys
+      You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys. Once created, save the API key values to a safe location on your local machine.  
 
 
 
@@ -66,7 +66,7 @@ During the onboarding process, you will be required to provide your broker URL. 
     <!-- - To fetch catalog.json -->
     - This value can be found in the Brokers tab in Partner  Center. 
     - To find it in RMC 
-      - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://test.cloud.ibm.com/onboarding/summary/[your-service]`
+      - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://cloud.ibm.com/onboarding/summary/[your-service]`
   - BROKER_ICR_NAMESPACE_URL
     - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
     - eg. `us.icr.io/yournamespace`
@@ -149,7 +149,7 @@ Our next step now is to deploy the broker application image we just created. The
   - ICR_IMAGE
     - Image name to push on namespace
   - CF_API
-    - Cloudfoundry API endpoint. See list of available endpoints [here](https://ondeck.console.cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-ts-cf-apps)
+    - Cloud Foundry API endpoint. See list of available endpoints [here](https://ondeck.console.cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-ts-cf-apps)
   - CF_ORGANIZATION
     - Name of organization to be targeted for deployment. Your orgs can be found [here](https://cloud.ibm.com/account/cloud-foundry)
   - CF_SPACE
@@ -173,7 +173,7 @@ Our next step now is to deploy the broker application image we just created. The
 
 ## Building and deploying in a single command 
 
-The CLI tool also provides a single command that both builds and dpeloys the the broker app   
+The CLI tool also provides a single command that both builds and deploys the the broker app   
   
   For Cloud Foundry:
 
