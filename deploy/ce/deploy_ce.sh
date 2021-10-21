@@ -46,16 +46,31 @@ This might take some time...";
 fi
 
 if [[ $RESULT == *"OK"* ]]; then
-	echo ""
-	echo "*******************************************************************************"
-	echo "Congratulations your broker is deployed!                          "
-	echo "                                                                   "
-	echo "Service is deployed on:                      "
-	echo "`ibmcloud ce application get -n $APP_NAME -o url`                                                              "
-	echo "                                                                   "
-	echo "Use the broker url to the register in Partner Center.                       "
-	echo "*******************************************************************************"
-	echo ""
+	APP_URL=`ibmcloud ce application get -n $APP_NAME -o url`
+	UPDATE_RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env BROKER_URL=$APP_URL --rs $CE_REGISTRY_SECRET_NAME`
+	if [[ $UPDATE_RESULT == *"OK"* ]]; then
+		echo ""
+		echo "*******************************************************************************"
+		echo "Congratulations your broker is deployed!                          "
+		echo "                                                                   "
+		echo "Service is deployed on:                      "
+		echo "$APP_URL                                                             "
+		echo "                                                                   "
+		echo "Use the broker url to the register in Partner Center.                       "
+		echo "*******************************************************************************"
+		echo ""
+	else
+		echo "$UPDATE_RESULT"
+		echo ""
+		echo "*******************************************************************************"
+		echo "|                         "
+		echo "|                                                                   "
+		echo "|	Something went wrong. check the logs above.                       "
+		echo "|                                                                   "
+		echo "|	                       "
+		echo "*******************************************************************************"
+		echo ""
+	fi
 else
 	echo "$RESULT"
 	echo ""
