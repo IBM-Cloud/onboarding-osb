@@ -65,29 +65,6 @@ public class BrokerControler {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(BrokerControler.class);
 
-
-    /**
-     * GET for testing. Not invoked by IBM Cloud.
-     * @throws Exception 
-     */
-    @GetMapping
-    public String get(final HttpServletRequest httpServletRequest) throws Exception
-    {
-        LOGGER.info("GET / request headers: " + headersString(httpServletRequest));
-        StringBuilder homepage = new StringBuilder();
-        homepage.append("<html><body><h2>Broker Service is running !!</h2>")
-        .append("Build Number : ")
-        .append(buildNumber)
-        .append(getCatalogTable())
-        .append("<br/><br/><b>Update Broker URL in Service Onboarding portal: </b>")
-        .append("<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>RMC:</b> <a href=\"https://test.cloud.ibm.com/onboarding/broker/test-osb\"> "
-                + "https://test.cloud.ibm.com/onboarding/broker/test-osb </a>")
-        .append("<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>PC:</b> <a href=\"https://test.cloud.ibm.com/partner-center/\"> "
-                + "https://test.cloud.ibm.com/partner-center/ </a>")
-        .append(getInstances());
-        return homepage.toString();
-    }
-
     /**
      * Import Catalog from RMC. Not invoked by IBM Cloud.
      * @param httpServletRequest http servlet request
