@@ -15,6 +15,7 @@
 package com.ibm.cloud.service.broker.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.ibm.cloud.service.broker.model.InstanceDto;
 
 public interface BrokerService {
 
@@ -41,5 +43,5 @@ public interface BrokerService {
     
     ResponseEntity<String> getState(String instanceId, String iamId) throws JsonProcessingException;
     
-    StringBuilder getServiceInstances() throws Exception;
+    List<InstanceDto> getServiceInstances() throws Exception;
 }

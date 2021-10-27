@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -49,6 +50,7 @@ import com.ibm.cloud.service.broker.enums.OperationState;
 import com.ibm.cloud.service.broker.enums.ServiceInstatanceStatus;
 import com.ibm.cloud.service.broker.model.Catalog;
 import com.ibm.cloud.service.broker.model.CreateServiceInstanceRequest;
+import com.ibm.cloud.service.broker.model.InstanceDto;
 import com.ibm.cloud.service.broker.model.Plan;
 import com.ibm.cloud.service.broker.model.ServiceDefinition;
 import com.ibm.cloud.service.broker.model.UpdateStateRequest;
@@ -264,24 +266,29 @@ public class BrokerServiceImpl implements BrokerService {
         return instance;
     }
 
-    // display service instances on broker home page in html table format
-    public StringBuilder getServiceInstances() throws Exception {
+    
+    public List<InstanceDto> getServiceInstances() throws Exception {
         List<ServiceInstance> instances = serviceInstanceRepository.findAll();
-        StringBuilder instanceTable = new StringBuilder();
-        if (!CollectionUtils.isEmpty(instances)) {
-            instanceTable.append("<br/><br/><b>Instance Details:</b>")
-            .append("<style>table, th, td {border: 1px solid black;} th, td {  padding: 10px;  }</style>")
-            .append("<table border=1><tr><th>#</th><th>Instance Id</th><th>Status</th><th>Created on</th></tr>");
-            int i = 0;
+        List<InstanceDto> instanceDtos = null;
+        if (instances != null && !instances.isEmpty()) {
+            instanceDtos = new ArrayList<InstanceDto>();
             for (ServiceInstance instance: instances) {
-                instanceTable.append("<tr><td>").append(++i).append("</td>");
-                instanceTable.append("<td>").append(instance.getInstanceId()).append("</td>");
-                instanceTable.append("<td>").append(instance.getStatus()).append("</td>");
-                instanceTable.append("<td>").append(instance.getCreateDate()).append("</td></tr>");
+                instanceDtos.add(mapToInstanceDto(instance));
             }
-            instanceTable.append("</table>");
         }
-        return instanceTable;
+        
+        
+        return instanceDtos;
     }
 
+    private InstanceDto mapToInstanceDto(ServiceInstance ins) {
+        InstanceDto dto = new InstanceDto();
+        dto.setInstanceId(ins.getInstanceId());
+        dto.setName(ins.getName());
+        dto.setPlanId(ins.getPlanId());
+        dto.setStatus(ins.getStatus());
+        dto.setRegion(ins.getRegion());
+        dto.setUpdateDate(ins.getUpdateDate());
+        return dto;
+    }
 }

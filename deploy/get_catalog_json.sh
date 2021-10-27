@@ -50,7 +50,7 @@ for row in $(echo "${children_array}" | jq -r '.[] | @base64'); do
 
 	# Pricing
 	plan_pricing="`curl -X GET $(_jq '.metadata.pricing.url') -H 'Authorization: Bearer '$access_token''`";
-	plan_costs='{"unit":'`echo $plan_pricing | jq '.metrics[0].charge_unit'`',"unitId":'`echo $plan_pricing | jq '.metrics[0].charge_unit_name'`',"resourceDisplayName":'`echo $plan_pricing | jq '.metrics[0].resource_display_name'`',"unitDisplayName":'`echo $plan_pricing | jq '.metrics[0].charge_unit_display_name'`',"amounts":'`echo $plan_pricing | jq '.metrics[0].amounts'`'}'
+	plan_costs='{"type": '`echo $plan_pricing | jq '.type'`', "metrics":'`echo $plan_pricing | jq '.metrics'`'}'
 	plan_metadata='{"created":"'$(_jq '.created')'","updated":"'$(_jq '.updated')'","allowInternalUsers":'$(_jq '.metadata.plan.allow_internal_users')',"displayName":"'$(_jq '.overview_ui.en.display_name')'","costs":'$plan_costs'}'
 	# /Pricing
 
