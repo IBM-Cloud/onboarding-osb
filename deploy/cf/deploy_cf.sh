@@ -4,6 +4,7 @@ echo ""
 echo "---------- Logging in cloudfoundry and ibmcloud ----------"
 
 BUILD_NUMBER=`./deploy/generate_build_number.sh`
+EMPTY='""'
 
 cf login -a $CF_API -u apikey -p $DEPLOYMENT_IAM_API_KEY -o $CF_ORGANIZATION -s $CF_SPACE;
 
@@ -18,6 +19,13 @@ cf set-env $APP_NAME BROKER_USERNAME $BROKER_USERNAME
 cf set-env $APP_NAME BROKER_PASSWORD $BROKER_PASSWORD
 cf set-env $APP_NAME BUILD_NUMBER $BUILD_NUMBER
 cf set-env $APP_NAME BROKER_URL $DASHBOARD_URL
+
+if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
+then
+	echo "METERING_API_KEY not provided"
+else
+	cf set-env $APP_NAME METERING_API_KEY $METERING_API_KEY
+fi
 
 RESULT="`cf start $APP_NAME`"
 if [[ $RESULT == *"running"* ]]; then

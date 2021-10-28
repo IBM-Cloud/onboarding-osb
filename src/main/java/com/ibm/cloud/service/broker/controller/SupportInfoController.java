@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ibm.cloud.service.broker.model.InstanceDto;
-import com.ibm.cloud.service.broker.service.BrokerService;
+import com.ibm.cloud.service.broker.service.SupportInfoService;
 import com.ibm.cloud.service.broker.util.BrokerUtil;
 
 @RestController
@@ -35,17 +35,27 @@ import com.ibm.cloud.service.broker.util.BrokerUtil;
 public class SupportInfoController {
 
     @Autowired
-    BrokerService brokerService;
-    
+    SupportInfoService supportInfoService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SupportInfoController.class);
-    
+
     @GetMapping(path="/instances", produces = "application/json")
     public ResponseEntity<List<InstanceDto>> getInstances( final HttpServletRequest httpServletRequest)
            throws Exception {
         LOGGER.info("Request received: GET /support/instances request headers: " + BrokerUtil.headersString(httpServletRequest));
-        List<InstanceDto> instances = brokerService.getServiceInstances();
+        List<InstanceDto> instances = supportInfoService.getServiceInstances();
         LOGGER.info("Request completed: GET /support/instances");
         return ResponseEntity.ok(instances);
+    }
+
+
+    @GetMapping(path="/metadata", produces = "application/json")
+    public ResponseEntity<String> getMetadata( final HttpServletRequest httpServletRequest)
+           throws Exception {
+        LOGGER.info("Request received: GET /support/metadata request headers: " + BrokerUtil.headersString(httpServletRequest));
+        String meta = supportInfoService.getMetadata();
+        LOGGER.info("Request completed: GET /support/metadata");
+        return ResponseEntity.ok(meta);
     }
 
 }

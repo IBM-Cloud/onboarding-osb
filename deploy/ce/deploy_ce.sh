@@ -4,6 +4,7 @@ echo ""
 echo "---------- Logging in ibmcloud ----------"
 
 BUILD_NUMBER=`./deploy/generate_build_number.sh`
+EMPTY='""'
 
 ./deploy/ce/handle_ce_project.sh
 
@@ -37,17 +38,33 @@ if [[ $APP_EXISTS == *"OK"* ]]; then
 	echo "Found
 Updating Application
 This might take some time...";
-	RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
+	if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
+	then
+		RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
+	else
+		RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env METERING_API_KEY=$METERING_API_KEY --rs $CE_REGISTRY_SECRET_NAME`
+	fi
 else
 	echo "Do not terminate...
 Creating new application...
-This might take some time...";
-	RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
+This might take some time... ";
+	if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
+	then
+		RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --rs $CE_REGISTRY_SECRET_NAME`
+	else
+		RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env METERING_API_KEY=$METERING_API_KEY --rs $CE_REGISTRY_SECRET_NAME`
+	fi
 fi
 
 if [[ $RESULT == *"OK"* ]]; then
 	APP_URL=`ibmcloud ce application get -n $APP_NAME -o url`
-	UPDATE_RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env BROKER_URL=$APP_URL --rs $CE_REGISTRY_SECRET_NAME`
+	if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
+	then
+		UPDATE_RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env BROKER_URL=$APP_URL --env DASHBOARD_URL=$APP_URL --env METERING_API_KEY=$METERING_API_KEY --rs $CE_REGISTRY_SECRET_NAME`
+	else
+		UPDATE_RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env BROKER_URL=$APP_URL --env DASHBOARD_URL=$APP_URL --rs $CE_REGISTRY_SECRET_NAME`
+	fi
+
 	if [[ $UPDATE_RESULT == *"OK"* ]]; then
 		echo ""
 		echo "*******************************************************************************"
