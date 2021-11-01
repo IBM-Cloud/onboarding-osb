@@ -20,6 +20,9 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UrlPathHelper;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 class WebMvcConfig implements WebMvcConfigurer {
@@ -29,6 +32,22 @@ class WebMvcConfig implements WebMvcConfigurer {
         UrlPathHelper urlPathHelper = new UrlPathHelper();
         urlPathHelper.setUrlDecode(false);
         configurer.setUrlPathHelper(urlPathHelper);
+    }
+
+    @Value("${cors.origin}")
+    String corsOrigin;
+  
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+      String[] allowedOrigins = corsOrigin.split(",");
+      registry
+        .addMapping("/**")
+        .allowedOrigins(allowedOrigins)
+        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+        .allowedHeaders("Accept", "Content-Type", "Authorization", "x-xsrf-token")
+        .exposedHeaders(HttpHeaders.AUTHORIZATION)
+        .allowCredentials(true)
+        .maxAge(500000);
     }
 
     @Bean

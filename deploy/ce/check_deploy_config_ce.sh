@@ -46,3 +46,19 @@ then
 else
 	echo "Ok"
 fi
+
+echo ""
+echo "---------- Checking METERING_API_KEY ----------"
+if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
+then
+	echo ""
+	echo "*******************************************************************************"
+	echo "METERING_API_KEY is not provided!" ;
+	echo "send metric option will not be available" ;
+	echo "refer README to set values" ;
+	echo "Exiting..." ;
+	echo "*******************************************************************************"
+	echo ""
+else
+	echo "Ok"
+fi

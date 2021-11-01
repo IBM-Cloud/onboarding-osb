@@ -43,11 +43,17 @@ for row in $(echo "${children_array}" | jq -r '.[] | @base64'); do
 	plan_pricing_type="$(_jq '.metadata.pricing.type')"
 	plan_type_free=""
 	if [[ $plan_pricing_type == *"free"* ]]; then
-		plan_type_free=true
-	else
 		plan_type_free=false
+	else
+		plan_type_free=true
 	fi
-	plan_metadata='{"created":"'$(_jq '.created')'","updated":"'$(_jq '.updated')'"}'
+
+	# Pricing
+	plan_pricing="`curl -X GET $(_jq '.metadata.pricing.url') -H 'Authorization: Bearer '$access_token''`";
+	plan_costs='{"type": '`echo $plan_pricing | jq '.type'`', "metrics":'`echo $plan_pricing | jq '.metrics'`'}'
+	plan_metadata='{"created":"'$(_jq '.created')'","updated":"'$(_jq '.updated')'","allowInternalUsers":'$(_jq '.metadata.plan.allow_internal_users')',"displayName":"'$(_jq '.overview_ui.en.display_name')'","costs":'$plan_costs'}'
+	# /Pricing
+
 	plan='{"name":"'$(_jq '.name')'","id":"'$(_jq '.id')'", "metadata":'$plan_metadata', "description":"'$(_jq '.overview_ui.en.description')'","paid":'$plan_type_free'}'
 	if [ $firstflag == true ]
 	then

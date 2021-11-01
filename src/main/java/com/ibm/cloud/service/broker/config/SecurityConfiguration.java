@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 
 @Configuration
@@ -38,12 +39,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception
     {
          http
-             .csrf().disable()
+             .cors().and().csrf().disable() 
              .antMatcher(AUTH_URL).httpBasic().and().authorizeRequests()
              .antMatchers(OPEN_URLS).permitAll().anyRequest().authenticated();
 
          //  Remove this line when h2 console not needed
-         http.headers().frameOptions().disable();
+         http.headers().httpStrictTransportSecurity().maxAgeInSeconds(31536000).includeSubDomains(true).preload(true).and()
+         .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN).and().contentTypeOptions().and().frameOptions()
+         .sameOrigin();
     }
     
     @Autowired

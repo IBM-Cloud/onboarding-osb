@@ -17,8 +17,12 @@ package com.ibm.cloud.service.broker.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -86,4 +90,28 @@ public class BrokerUtil {
         return null;
     }
 
+    public static String headersString(final HttpServletRequest request)
+    {
+        final Map<String, List<String>> headerMap = new TreeMap<String, List<String>>();
+
+        final Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements())
+        {
+            final List<String> headerValueList = new ArrayList<String>();
+
+            final String headerName = headerNames.nextElement();
+
+            final Enumeration<String> headerValues = request.getHeaders(headerName);
+            while (headerValues.hasMoreElements())
+            {
+                headerValueList.add(headerValues.nextElement());
+            }
+
+            headerMap.put(headerName,
+                          headerValueList);
+        }
+
+        return headerMap.toString();
+    }
+    
 }

@@ -41,5 +41,4 @@ public interface BrokerService {
     
     ResponseEntity<String> getState(String instanceId, String iamId) throws JsonProcessingException;
     
-    StringBuilder getServiceInstances() throws Exception;
 }
