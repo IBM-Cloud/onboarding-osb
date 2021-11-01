@@ -6,6 +6,19 @@ echo "---------- Logging in cloudfoundry and ibmcloud ----------"
 BUILD_NUMBER=`./deploy/generate_build_number.sh`
 EMPTY='""'
 
+IAM_ENDPOINT_TEST="https://iam.test.cloud.ibm.com"
+IAM_ENDPOINT_PROD="https://iam.cloud.ibm.com"
+USAGE_ENDPOINT_TEST="https://billing.test.cloud.ibm.com"
+USAGE_ENDPOINT_PROD="https://billing.cloud.ibm.com"
+
+if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+	IAM_ENDPOINT=$IAM_ENDPOINT_TEST
+	USAGE_ENDPOINT=$USAGE_ENDPOINT_TEST
+else
+	IAM_ENDPOINT=$IAM_ENDPOINT_PROD
+	USAGE_ENDPOINT=$USAGE_ENDPOINT_PROD
+fi
+
 cf login -a $CF_API -u apikey -p $DEPLOYMENT_IAM_API_KEY -o $CF_ORGANIZATION -s $CF_SPACE;
 
 echo ""
@@ -19,6 +32,8 @@ cf set-env $APP_NAME BROKER_USERNAME $BROKER_USERNAME
 cf set-env $APP_NAME BROKER_PASSWORD $BROKER_PASSWORD
 cf set-env $APP_NAME BUILD_NUMBER $BUILD_NUMBER
 cf set-env $APP_NAME BROKER_URL $DASHBOARD_URL
+cf set-env $APP_NAME IAM_ENDPOINT $IAM_ENDPOINT
+cf set-env $APP_NAME USAGE_ENDPOINT $USAGE_ENDPOINT
 
 if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
 then
