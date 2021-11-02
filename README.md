@@ -2,18 +2,18 @@
 # Open Service Broker Reference App
 
 ## Overview
-The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows services trying to onboard to the IBM Cloud catalog to quickly spin up a broker that is pre-configured with the service. 
+The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows services onboarding to the IBM Cloud catalog to quickly spin up a broker app that is pre-configured with the service. 
 
 There are 2 way to onboard a service in the IBM Cloud catalog: 
   - the traditional [Staging Resource Management Console](https://cloud.ibm.com/onboarding/dashboard)  
   - the new [Partner Center](https://cloud.ibm.com/partner-center/sell) 
 
-During the onboarding process, you will be required to provide your broker URL. This readme provides a step by step guide on how to configure and deploy  the broker project. This is done with the help of the CLI makefile automation that will perform the following:
+During the onboarding process, you are required to provide your broker app URL. This readme provides a step by step guide on how to configure and deploy  the broker app. This is done using the provided CLI makefile automation. The automation performs the following tasks for you:
 
- - use maven to build the Java OSB broker code  
- - create a docker container image of the broker, 
- - upload it to IBM Container Registry 
- - deploy the app on either IBM Cloud Foundry or IBM Code Engine using the OSB container image 
+ - builds the Java OSB broker code using maven  
+ - creates a docker container image of the broker app, 
+ - creates an IBM Container Registry (ICR) namespace (if it does exist) and uploads the image to the ICR namesapce 
+ - deploys the app on either IBM Cloud Foundry or IBM Code Engine
 
 ## Prerequisites
 
@@ -31,19 +31,30 @@ During the onboarding process, you will be required to provide your broker URL. 
 
 3. IBM Container Registry namespace
 
-    The CLI automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. If you do not have access to such a namespace, please follow these [instructions](https://cloud.ibm.com/docs/Registry?topic=Registry-getting-started#gs_registry_namespace_add) to create one.
+    The CLI automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. If you do not such a namespace, we will create one for you. Simply provide a unique name in the `build.config.properties` for your namespace in the _Building the Broker_ section . 
+    <!-- follow these [instructions](https://cloud.ibm.com/docs/Registry?topic=Registry-getting-started#gs_registry_namespace_add) to create one. -->
+
 4. IBM Cloud API key(s)
 
     The project expects 2 IBM Cloud API keys 
 
     - ONBOARDING_IAM_API_KEY
-      API key of the cloud account where the service is being onboarded. This is used to access test Global Catalog API
+
+      API key created in cloud account where the service is being onboarded. This is used to access test Global Catalog API
       
     - DEPLOYMENT_IAM_API_KEY
-      IBM cloud API key of the cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. 
+
+      IBM cloud API key created in cloud account where the broker is to be deployed. Necessary permission are as descriibed in the Pre-requisites section. 
       
       You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys. Once created, save the API key values to a safe location on your local machine.  
 
+5. Create a ServiceID and API Key (for metering)
+
+    To be able to test metering,  created a new ServiceID in the onboarding account. The service ID can be created [here](https://cloud.ibm.com/iam/serviceids). Click the 3 dot menu and unlock the serviceID. Next select the ServiceID row to go to the details page and create an API key for the Service ID. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
+
+    - METERING_API_KEY
+
+      IBM cloud API key created using the steps mentioned above.
 
 
 ## Building the Broker
@@ -113,7 +124,7 @@ Our next step now is to deploy the broker application image we just created. The
     - Provide a name for the broker container image that will be pushed on ICR namespace
 
   - CE_PROJECT
-    - Select a project from the [list of available projects](https://cloud.ibm.com/codeengine/projects). You can also [create a new one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-manage-project#create-a-project). Note that you must have a selected project to deploy an app.
+    - Select a project from the [list of available projects](https://cloud.ibm.com/codeengine/projects). You can [create a new one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-manage-project#create-a-project) yourself or give us a name and we will create one for you. 
   - CE_REGION
     - Set region for code engine deployment. This is value in the `Location` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
   - CE_RESOURCE_GROUP
@@ -125,8 +136,8 @@ Our next step now is to deploy the broker application image we just created. The
     
 ### 2. Set the variables in your environment
 
-    export code engine config properties:
-      export $(cat deploy/ce/ce.config.properties)
+    
+    export $(cat deploy/ce/ce.config.properties)
 
 ### 3. Deploy to ce
 
@@ -163,8 +174,8 @@ Our next step now is to deploy the broker application image we just created. The
       <br />
 
 ### 2. Set the variables in your environment
-    export code engine config properties:
-      export $(cat deploy/cf/cf.config.properties)
+    
+    export $(cat deploy/cf/cf.config.properties)
 
 ### 3. Deploy to cf
 
