@@ -31,7 +31,7 @@ During the onboarding process, you are required to provide your broker app URL. 
 
 3. IBM Container Registry namespace
 
-    The CLI automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. If you do not such a namespace, we will create one for you. Simply provide a unique name in the `build.config.properties` for your namespace in the _Building the Broker_ section . 
+    The CLI automation requires an IBM Container Registry namespace to be provided in the config property - `BROKER_ICR_NAMESPACE_URL`. This is the namespace into which the OSB container image will be uploaded. Look for available namespaces [here](https://cloud.ibm.com/registry/namespaces). If you do not have a namespace you can use, we will create one for you, simply provide a unique name in the `build.config.properties` for your namespace in the _Building the Broker_ section below. 
     <!-- follow these [instructions](https://cloud.ibm.com/docs/Registry?topic=Registry-getting-started#gs_registry_namespace_add) to create one. -->
 
 4. IBM Cloud API key(s)
