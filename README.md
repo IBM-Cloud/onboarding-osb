@@ -110,6 +110,8 @@ Our next step now is to deploy the broker application image we just created. The
 ### 1. Fill out the [`deploy/ce/ce.config.properties`](deploy/ce/ce.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables.   
   - APP_NAME
     - Application name for the broker on Code Engine  Try using a unique identifier in the name so that you dont run into conflicts.  
+  - ONBOARDING_ENV
+    - Can be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
   - BROKER_USERNAME
     - Set a username for the Broker API
   - BROKER_PASSWORD
@@ -149,6 +151,8 @@ Our next step now is to deploy the broker application image we just created. The
 
   - APP_NAME
     - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundry application. Try using a unique identifier in the name so that you dont run into conflicts.  
+  - ONBOARDING_ENV
+    - Can be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
   - BROKER_USERNAME
     - Set a username for the Broker API
   - BROKER_PASSWORD
@@ -175,7 +179,7 @@ Our next step now is to deploy the broker application image we just created. The
 
 ### 3. Deploy to cf
 
-    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey  METERING_API_KEY=your-metering-apikey make deploy-cf 
+    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey METERING_API_KEY=your-metering-apikey make deploy-cf 
 
   Deploys the broker on IBM Cloud Foundry 
 
@@ -188,11 +192,11 @@ The CLI tool also provides a single command that both builds and deploys the the
   
   For Cloud Foundry:
 
-    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-cf
+    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey METERING_API_KEY=your-metering-apikey make build-deploy-cf
   
  For Code Engine:
 
-    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey  make build-deploy-ce
+    DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey METERING_API_KEY=your-metering-apikey make build-deploy-ce
 
   
 

@@ -2,25 +2,40 @@ all:
 	@echo "Available commands"
 	@echo ""
 	@echo "	make build"
+	@echo ""
+	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey make build"
+	@echo ""
 	@echo "		build and push image on icr."
 	@echo "		required env variables: "
 	@echo "		 ONBOARDING_ENV, GC_OBJECT_ID, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, ICR_NAMESPACE_REGION, ICR_RESOURCE_GROUP"
 	@echo ""
 	@echo "	make deploy-cf"
+	@echo ""
+	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey METERING_API_KEY=your-metering-apikey make deploy-cf"
+	@echo ""
 	@echo "		deploy image on cloud foundry."
 	@echo "		required env variables: "
 	@echo "		 APP_NAME ,BROKER_USERNAME ,BROKER_PASSWORD ,BROKER_ICR_NAMESPACE_URL ,ICR_IMAGE ,CF_API ,CF_ORGANIZATION ,CF_SPACE"
 	@echo ""
 	@echo "	make deploy-ce"
+	@echo ""
+	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey METERING_API_KEY=your-metering-apikey make deploy-ce"
+	@echo ""
 	@echo "		deploy image on code engine."
 	@echo "		required env variables: "
 	@echo "		 APP_NAME, BROKER_USERNAME, BROKER_PASSWORD, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, CE_PROJECT, CE_REGION, CE_RESOURCE_GROUP, CE_REGISTRY_SECRET_NAME"
 	@echo ""
 	@echo "	make build-deploy-cf"
+	@echo ""
+	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey METERING_API_KEY=your-metering-apikey make build-deploy-cf"
+	@echo ""
 	@echo "		make build + make deploy-cf."
 	@echo "		required env variables: all from commands build and deploy-cf "
 	@echo ""
 	@echo "	make build-deploy-ce"
+	@echo ""
+	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey METERING_API_KEY=your-metering-apikey make build-deploy-ce"
+	@echo ""
 	@echo "		make build + make deploy-ce."
 	@echo "		required env variables: all from commands build and deploy-ce "
 	@echo ""
@@ -135,7 +150,7 @@ deploy-job-cf:
 	@echo "Deploying image to cloudfoundry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties  -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
+	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
 
 deploy-job-ce:
 	@echo  starting deploy...
@@ -146,7 +161,7 @@ deploy-job-ce:
 	@echo ""
 	@./deploy/ce/ce_export_env.sh
 	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
+	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:
 	@./deploy/build_export_env.sh

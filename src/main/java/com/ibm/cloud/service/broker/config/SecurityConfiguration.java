@@ -45,8 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
          //  Remove this line when h2 console not needed
          http.headers().httpStrictTransportSecurity().maxAgeInSeconds(31536000).includeSubDomains(true).preload(true).and()
-         .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN).and()
-         .contentSecurityPolicy("script-src 'self' ").and().contentTypeOptions().and().frameOptions()
+         .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN).and().contentTypeOptions().and().frameOptions()
          .sameOrigin();
     }
     

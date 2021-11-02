@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -35,7 +34,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -164,38 +162,10 @@ public class BrokerServiceImpl implements BrokerService {
 
     @Override
     public ResponseEntity<String> updateState(String instanceId, JsonNode json, String iamId) throws JsonProcessingException {
-        // get service instance for given id
-        //ServiceInstance serviceInstance = validateInstanceId(instanceId);
+
         ObjectMapper mapper = new ObjectMapper();
         UpdateStateRequest updateStateRequest = mapper.treeToValue(json, UpdateStateRequest.class);
-        /*if (serviceInstance != null) {
-            // disable instance
-            if (!updateStateRequest.getEnabled()) {
-                
-                if (ServiceInstatanceStatus.ACTIVE.name().equals(serviceInstance.getStatus())
-                        && serviceInstance.getEnabled()) {
-                    serviceInstance.setEnabled(false);
-                    serviceInstance.setStatus(ServiceInstatanceStatus.DISABLED.name());
-                    serviceInstance.setUpdateDate(Instant.now());
-                    serviceInstanceRepository.save(serviceInstance);
-                }
-            } else {
-                // enable instance
-                if (ServiceInstatanceStatus.DISABLED.name().equals(serviceInstance.getStatus())
-                        && !serviceInstance.getEnabled()) {
-                    serviceInstance.setEnabled(true);
-                    serviceInstance.setStatus(ServiceInstatanceStatus.ACTIVE.name());
-                    serviceInstance.setUpdateDate(Instant.now());
-                    serviceInstanceRepository.save(serviceInstance);
-                }
-            }
-            //TODO: create workflow for this state change
-            ServiceInstanceStateResponse response = mapResponse(serviceInstance);
-            return ResponseEntity.ok(mapper.writeValueAsString(response));
-        }
-        LOGGER.error("Update service instance state failed as Service inatsnce not found with id: {}", instanceId);
-        *///return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Service inatsnce not found with id: " + instanceId);
-        //return temp response as success
+        //return response as success
         ServiceInstanceStateResponse resp = new ServiceInstanceStateResponse();
         resp.setActive(updateStateRequest.getEnabled());
         resp.setEnabled(updateStateRequest.getEnabled());
@@ -206,16 +176,8 @@ public class BrokerServiceImpl implements BrokerService {
     @Override
     public ResponseEntity<String> getState(String instanceId, String iamId) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        // get service instance for given id
-        /*ServiceInstance serviceInstance = validateInstanceId(instanceId);
         
-        if (serviceInstance != null) {
-            ServiceInstanceStateResponse response = mapResponse(serviceInstance);
-            return ResponseEntity.ok(mapper.writeValueAsString(response));
-        }
-        LOGGER.error("Get service instance state failed as Service inatsnce not found with id: {}", instanceId);
-        *///return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Service inatsnce not found with id: " + instanceId);
-        //return temp response as success
+        //return response as success
         ServiceInstanceStateResponse resp = new ServiceInstanceStateResponse();
         resp.setActive(false);
         resp.setEnabled(false);
@@ -223,25 +185,6 @@ public class BrokerServiceImpl implements BrokerService {
         return ResponseEntity.ok(mapper.writeValueAsString(resp));
     }
 
-
-    /*private ServiceInstance validateInstanceId(String instanceId) {
-        
-        List<ServiceInstance> instanceList = serviceInstanceRepository.findByInstanceIdAndStatusNotIn(instanceId,
-                Arrays.asList(ServiceInstatanceStatus.DEPROVISIONED.name()));
-
-        if (instanceList != null && !instanceList.isEmpty()) {
-            return instanceList.get(0);
-        }
-        return null;
-    }*/
-
-    /*private ServiceInstanceStateResponse mapResponse(ServiceInstance serviceInstance) {
-        ServiceInstanceStateResponse response = new ServiceInstanceStateResponse();
-        response.setActive(ServiceInstatanceStatus.ACTIVE.name().equals(serviceInstance.getStatus()) ? true : false);
-        response.setEnabled(serviceInstance.getEnabled()==null ? response.getActive() : serviceInstance.getEnabled());
-        response.setLastActive(serviceInstance.getUpdateDate().getEpochSecond());
-        return response;
-    }*/
 
     private ServiceInstance getServiceInstanceEntity(CreateServiceInstanceRequest request, String iamId, String region) throws JsonProcessingException {
 
@@ -260,28 +203,8 @@ public class BrokerServiceImpl implements BrokerService {
         
         instance.setCreateDate(Instant.now());
         instance.setUpdateDate(Instant.now());
-        //TODO: isMetered
-        return instance;
-    }
 
-    // display service instances on broker home page in html table format
-    public StringBuilder getServiceInstances() throws Exception {
-        List<ServiceInstance> instances = serviceInstanceRepository.findAll();
-        StringBuilder instanceTable = new StringBuilder();
-        if (!CollectionUtils.isEmpty(instances)) {
-            instanceTable.append("<br/><br/><b>Instance Details:</b>")
-            .append("<style>table, th, td {border: 1px solid black;} th, td {  padding: 10px;  }</style>")
-            .append("<table border=1><tr><th>#</th><th>Instance Id</th><th>Status</th><th>Created on</th></tr>");
-            int i = 0;
-            for (ServiceInstance instance: instances) {
-                instanceTable.append("<tr><td>").append(++i).append("</td>");
-                instanceTable.append("<td>").append(instance.getInstanceId()).append("</td>");
-                instanceTable.append("<td>").append(instance.getStatus()).append("</td>");
-                instanceTable.append("<td>").append(instance.getCreateDate()).append("</td></tr>");
-            }
-            instanceTable.append("</table>");
-        }
-        return instanceTable;
+        return instance;
     }
 
 }
