@@ -2,29 +2,33 @@
 # Open Service Broker Reference App
 
 ## Overview
-The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows services onboarding to the IBM Cloud catalog to quickly spin up a broker app that is pre-configured with the service. 
+The  [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) broker reference project allows SaaS services onboarding to the IBM Cloud catalog to quickly spin up a broker app. 
 
 There are 2 way to onboard a service in the IBM Cloud catalog: 
-  - the traditional [Staging Resource Management Console](https://cloud.ibm.com/onboarding/dashboard)  
+  - the traditional [Resource Management Console](https://cloud.ibm.com/onboarding/dashboard)  
   - the new [Partner Center](https://cloud.ibm.com/partner-center/sell) 
 
-As you onboard through Partner Center or RMC, you will  be required to provide your broker app URL. This readme provides a step by step guide on how to configure and deploy a reference broker app that hooks up to your service and helps you test an end to end flow early in the onboarding process. Once configured, CLI makefile automation performs the following tasks for you:
+As you onboard through Partner Center or RMC, you will  be required to provide your broker app URL. This readme provides a step by step guide on how to configure and deploy a reference broker app that hooks up to your service and helps you test an end to end flow early in the onboarding process. This is all done with the help of the CLI makefile automation that performs the following tasks for you:
 
  - builds the Java OSB broker code using maven  
  - creates a docker container image of the broker app, 
  - creates an IBM Container Registry (ICR) namespace (if it does exist) and uploads the image to the ICR namesapce 
  - deploys the app on either IBM Cloud Foundry or IBM Code Engine
 
-> Note that this broker is not recommended to be used in production but it to be used as a reference to build your production broker
+> Note that this broker is not recommended being used in production but it to be used as a reference to build your production broker
 
 ## Introduction to Onboarding vs Deployment IBM Cloud Accounts
-In the section to follow you will come across many references to Onboarding and Deployment IBM Cloud account. This section tries do demystify the two.
+In the sections to follow you will come across many references to Onboarding and Deployment IBM Cloud account. This section tries do demystify the two.
 
 #### _Onboarding IBM Cloud Account_ 
-is the cloud account under which your SaaS service is being onboarded via RMC or Partner Center.
+is the IBM Cloud account under which your SaaS service is being onboarded via RMC or Partner Center.
+
+> Note to IBMers: If you are an IBMers, very likely you will  be onboarding on test.cloud.ibm.com but your Deployment Cloud account MUST be cloud.ibm.com. Care should be taken to create the right resources in the right cloud environment.
 
 #### _Deployment IBM Cloud Account_ 
-is the cloud account under which you will be deploying your broker app using either Code Engine or Cloud Foundary. Note that Deployment  cloud account MUST be an account in cloud.ibm.com and NOT in test.cloud.ibm.com or any other flavor of IBM cloud.
+is the cloud account under which you will be deploying your broker app using either Code Engine or Cloud Foundry. You could choose this to be same as your Onboarding Cloud account as long as the account is on cloud.ibm.com (IBM Cloud prod)
+
+> Note to IBMers: The Deployment  cloud account **MUST** be an account in **cloud.ibm.com** and **NOT** in test.cloud.ibm.com or any other flavor of IBM cloud. This implies, the IBM Container registry, namespace and the IBM Code Engine or Cloud Foundry app to be deployed in the sections to follow have to be on  cloud.ibm.com
 
 ## Prerequisites
 
@@ -51,27 +55,27 @@ is the cloud account under which you will be deploying your broker app using eit
 
 3. #### IBM Cloud API key(s)
 
-    The project expects 2 IBM Cloud API keys 
+    The project expects 3 IBM Cloud API keys. Two are covered in this section and the third one in the next section. 
 
     - ONBOARDING_IAM_API_KEY
 
-      API key created in cloud account where the service is being onboarded. This is used to access [Global Catalog](https://globalcatalog.cloud.ibm.com) API
+      is the API key created in cloud account where the SaaS service is being onboarded via RMC or PC. The API key will used to access [Global Catalog](https://globalcatalog.cloud.ibm.com) API
       
     - DEPLOYMENT_IAM_API_KEY
 
-      IBM cloud API key created in cloud account where the broker is to be deployed. The API key/user must have the following access in the  Deployment IBM Cloud Account 
+      is the IBM cloud API key created in cloud account where the broker is to be deployed. The API key (and therefore the user owning the API key) must have the following access in the  Deployment IBM Cloud Account 
         
         a. Writer and Editor access to IBM Container Registry
 
         b. Editor access to IBM Cloud Foundry or IBM Code Engine 
       
-      Search your user and verify you have the required access [here](https://cloud.ibm.com/iam/users)
+      Find your user and verify you have the required access [here](https://cloud.ibm.com/iam/users)
 
       You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys. Once created, save the API key values to a safe location on your local machine.  
 
 4. #### Create a ServiceID and API Key (for metering)
 
-    To be able to test metering,  a new ServiceID need to be creaed in the on-boarding IBM Cloud  account. The service ID can be created [here](https://cloud.ibm.com/iam/serviceids). Once created, click the 3 dot menu and unlock the serviceID. Next select the ServiceID row to go to the details page and create an API key for the Service ID. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
+    To be able to test metering on your SaaS service, a new ServiceID need to be created in the [Onboarding IBM Cloud account](#onboarding-ibm-cloud-account). The service ID can be created [here](https://cloud.ibm.com/iam/serviceids). Once created, click the 3 dot menu and unlock the serviceID. Next select the ServiceID row to go to the details page and create an API key for the Service ID. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
 
     - METERING_API_KEY
 
@@ -87,11 +91,8 @@ is the cloud account under which you will be deploying your broker app using eit
 
 ### 2. Fill out the  [`deploy/build.config.properties`](deploy/build.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables 
 
-
-   >   Note: If you do not wish to export the properties as environment variables, the deploying will still work as long as the properties are set in this properties file(s):<br />
-   > Note: Environment variables take precedence over properties set in the config.properties
-
-
+   <!-- >   Note: If you do not wish to export the properties as environment variables, the deploying will still work as long as the properties are set in this properties file(s)<br />
+   > Note: Environment variables take precedence over properties set in the config.properties -->
 
   - ONBOARDING_ENV
     - Can be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
@@ -100,7 +101,7 @@ is the cloud account under which you will be deploying your broker app using eit
     - This value can be found in the Brokers tab in Partner  Center. 
     - To find it in RMC 
       - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://cloud.ibm.com/onboarding/summary/[your-service]`
-  - BROKER_ICR_NAMESPACE_URL
+  - #### BROKER_ICR_NAMESPACE_URL
     - The CLI automation requires an IBM Container Registry namespace in the [Deployment Cloud Account](#deployment-ibm-cloud-account) into which the OSB container image will be uploaded. You can choose one of the available namespaces [here](https://cloud.ibm.com/registry/namespaces). If you would like to create a new namespace simply provide a unique name and the automation will create one for you. If you would like to create it manually please follow [these](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) instructions and provide the name.  
     - eg. `us.icr.io/yournamespace`
   - ICR_IMAGE
@@ -138,20 +139,19 @@ Our next step now is to deploy the broker application image we just created. The
 
 ### 1. Fill out the [`deploy/ce/ce.config.properties`](deploy/ce/ce.config.properties) files with the instructions provided below and export the file(s) to create OS environment variables.   
   - APP_NAME
-    - Application name for the broker on Code Engine  Try using a unique identifier in the name so that you dont run into conflicts.  
+    - is the application name you would like to give the broker on Code Engine.  Try using a unique identifier in the name so that you dont run into conflicts.  
   - ONBOARDING_ENV
-    - Can be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
+    - should be set to either `stage` or `prod` based on whether the service is being on-boarded  using the staging   (used internally by IBMers only) or production environments
   - BROKER_USERNAME
-    - Set a username for the Broker API
+    - is the username you would like  to set for the Broker
   - BROKER_PASSWORD
-    - Set a password for the Broker API
+    - is the password you would like to set for the Broker 
     > Note: The BROKER_USERNAME and BROKER_PASSWORD values provided here also need to be configured in RMC while publishing broker. If no environment variable present for both default values would be applied from properties.
   - BROKER_ICR_NAMESPACE_URL
-    - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
+    - use the same namespace URL provided in `deploy/build.config.properties` during the build step
     - eg. `us.icr.io/yournamespace`
   - ICR_IMAGE
-    - Provide a name for the broker container image that will be pushed on ICR namespace
-
+    - use the same image name provided in `deploy/build.config.properties` during the build step
   - CE_PROJECT
     - Select a project from the [list of available projects](https://cloud.ibm.com/codeengine/projects). You can [create a new one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-manage-project#create-a-project) yourself or give us a name and we will create one for you. 
   - CE_REGION
