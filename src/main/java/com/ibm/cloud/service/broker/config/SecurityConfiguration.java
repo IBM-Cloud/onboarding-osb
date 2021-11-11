@@ -45,6 +45,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
          //  Remove this line when h2 console not needed
          http.headers().httpStrictTransportSecurity().maxAgeInSeconds(31536000).includeSubDomains(true).preload(true).and()
+         /*.frameOptions()
+         .disable()
+         .addHeaderWriter(new XFrameOptionsHeaderWriter(new StaticAllowFromStrategy(URI.create("*.ibm.com"))));*/
+         .contentSecurityPolicy("frame-ancestors self *.ibm.com").and()
          .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN).and().contentTypeOptions().and().frameOptions()
          .sameOrigin();
     }
