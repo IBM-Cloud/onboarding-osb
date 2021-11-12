@@ -11,6 +11,7 @@ C_CE_PROJECT=`cat ${CONFIG_FILE} | grep CE_PROJECT | cut -d'=' -f2`
 C_CE_REGISTRY_SECRET_NAME=`cat ${CONFIG_FILE} | grep CE_REGISTRY_SECRET_NAME | cut -d'=' -f2`
 C_ICR_IMAGE=`cat ${CONFIG_FILE} | grep ICR_IMAGE | cut -d'=' -f2`
 C_ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
+C_PC_URL=`cat ${CONFIG_FILE} | grep PC_URL | cut -d'=' -f2`
 
 EMPTY='""'
 
@@ -34,4 +35,5 @@ CE_PROJECT=$(getVar CE_PROJECT)
 CE_REGION=$(getVar CE_REGION)
 CE_RESOURCE_GROUP=$(getVar CE_RESOURCE_GROUP)
 CE_REGISTRY_SECRET_NAME=$(getVar CE_REGISTRY_SECRET_NAME)
-ONBOARDING_ENV=$(getVar ONBOARDING_ENV)" > deploy/ce/ce.config.properties
+ONBOARDING_ENV=$(getVar ONBOARDING_ENV)
+PC_URL=$(getVar PC_URL)" > deploy/ce/ce.config.properties
