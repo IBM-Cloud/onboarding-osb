@@ -1,0 +1,67 @@
+@import "../../styles/global.scss";
+
+.test-brd {
+  border: 1px red solid;
+  position: fixed;
+  top: -2rem;
+  height: 100%;
+}
+
+.test-brd2{
+  border: 1px green solid;
+  width: 100%;
+}
+
+.bx--header-panel--expanded {
+  width: 45%;
+  border-right: 0px solid #393939;
+  border-left: 0px solid #393939;
+  box-shadow: 5px 5px 10px gray;
+  overflow: auto;
+  padding-bottom: 2rem;
+}
+
+.bx--header-panel{
+  padding-top: 1rem;
+  top: 0;
+  background-color: $ui-02;
+  color: $text-01;
+}
+
+.bx--btn--ghost, .bx--btn--ghost:hover{
+  color: $text-01;
+  background: none;
+  border: none;
+}
+
+.sub-row{
+	margin-top: 2rem;
+}
+
+.panel-ele-70{
+  width: 70%;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.testing-row{
+  background-color: $ui-01;
+  padding: 1rem;
+}
+
+.testing-row-bottom{
+  margin-top: 0;
+}
+
+.bx--data-table tbody tr,
+.bx--data-table tbody tr td,
+.bx--data-table tbody tr th,
+.bx--table-toolbar {
+  background-color: none !important;
+}
+
+.metric-table-panel *{
+  background-color: $ui-01;
+}

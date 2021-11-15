@@ -1,0 +1,15 @@
+@import "./variables.scss";
+
+@import "~carbon-components/scss/globals/scss/typography";
+
+.h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.28572;
+  letter-spacing: 0;
+}
+
+.h5 {
+  font-size: medium;
+  font-weight: bold;
+}

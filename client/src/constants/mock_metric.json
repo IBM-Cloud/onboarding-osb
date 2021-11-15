@@ -1,0 +1,15 @@
+[
+	{
+	  "id": "1",
+	  "metric": "Gigabyte-hours",
+	  "type": "Per unit",
+	  "metricId": "IhisisYourPartNumber"
+	},
+	{
+	  "id": "2",
+	  "metric": "Another-metrics",
+	  "type": "Tiered",
+	  "metricId": "OtherPartNumber"
+	}
+  ]
+  

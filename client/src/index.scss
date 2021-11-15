@@ -1,0 +1,30 @@
+
+@import '~carbon-components/scss/globals/scss/styles.scss';
+@import '@carbon/colors/scss/colors';
+@import '@carbon/grid/scss/grid';
+
+@import './styles/variables.scss';
+@import '~carbon-components/scss/globals/scss/typography';
+
+
+body {
+  margin: 0;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  background-color: $ui-01;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p{
+  text-align: justify;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.hl{
+  background-color: red;
+  border: 2px yellow solid;
+}
