@@ -19,7 +19,7 @@ else
 	echo "$TARGET_RESULT"
 	echo ""
 fi
-
+echo "checking project. new project will be created if failed to find project with name $CE_PROJECT"
 get_project="`ibmcloud ce project get -n $CE_PROJECT`"
 
 if [[ $get_project == *"OK"* ]]; then

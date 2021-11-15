@@ -29,6 +29,7 @@ ibmcloud ce project select -n $CE_PROJECT
 echo ""
 echo "---------- Checking in ce registry secret ----------"
 
+echo "checking ce registry. new registry will be created if failed to find registry with name $CE_REGISTRY_SECRET_NAME"
 GET_CE_REG=`ibmcloud ce registry get -n $CE_REGISTRY_SECRET_NAME`
 
 if [[ $GET_CE_REG == *"OK"* ]]; then
@@ -45,6 +46,7 @@ RESULT=""
 
 echo "
 Trying to find application on Code Engine"
+echo "new application will be created if failed to find application with name $APP_NAME"
 APP_EXISTS="`ibmcloud ce application get -n $APP_NAME`"
 
 if [[ $APP_EXISTS == *"OK"* ]]; then
