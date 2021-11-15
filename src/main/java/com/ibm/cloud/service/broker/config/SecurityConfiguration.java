@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${service.broker.password}")
     private String pass;
     
-    private static final String[] OPEN_URLS = {"/provision_status/**"};
+    private static final String[] OPEN_URLS = {"/provision_status/**", "/#/instance_details"};
     private static final String AUTH_URL = "/**";
 
     @Override
