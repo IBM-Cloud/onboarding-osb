@@ -178,7 +178,7 @@ window.env = {
   "npm_package_description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "npm_package_eslintConfig_extends_0": "react-app",
   "npm_package_eslintConfig_extends_1": "react-app/jest",
-  "npm_package_gitHead": "c94943ee463107de164ca68465e91c89a0485dd4",
+  "npm_package_gitHead": "b7816c8809a184b2ff59866309f15f26b7d33a87",
   "npm_package_name": "osb-broker-ui",
   "npm_package_private": "true",
   "npm_package_readmeFilename": "README.md",
@@ -220,7 +220,7 @@ window.env = {
   "windir": "C:\\Windows",
   "WSLENV": "WT_SESSION::WT_PROFILE_ID",
   "WT_PROFILE_ID": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-  "WT_SESSION": "1ad84bf2-0d76-4416-a169-3eed9ffa7e4b",
+  "WT_SESSION": "94b853f5-db18-4f54-8bed-ede87a2978af",
   "ZES_ENABLE_SYSMAN": "1",
   "_prog": "node"
 };

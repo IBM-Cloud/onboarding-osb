@@ -42,6 +42,13 @@ else
 	cf set-env $APP_NAME METERING_API_KEY $METERING_API_KEY
 fi
 
+if [ -z $PC_URL ] || [ $PC_URL == $EMPTY ];
+then
+	echo "METERING_API_KEY not provided"
+else
+	cf set-env $APP_NAME PC_URL $PC_URL
+fi
+
 RESULT="`cf start $APP_NAME`"
 if [[ $RESULT == *"running"* ]]; then
 	echo ""
