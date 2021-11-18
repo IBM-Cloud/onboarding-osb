@@ -1,0 +1,55 @@
+{
+    "services": [
+        {
+            "id": "63d69f00-ff28-4785-85f8-13bde6620390",
+            "name": "test-osb",
+            "description": "OSB Test SDK Sample",
+            "bindable": false,
+            "plan_updateable": false,
+            "plans": [
+                {
+                    "id": "1f726d3c-e728-347y-a963-0d5d580fba2b",
+                    "name": "lite",
+                    "description": "Lite plan",
+                    "metadata": {
+                        "created": "2021-08-18T13:56:11.448Z",
+                        "updated": "2021-09-01T06:14:15.618Z"
+                    }
+                },
+                {
+                    "id": "616f300c-781e-d5e3-ae20-0c45ed3f7464",
+                    "name": "paid-plan1",
+                    "description": "Paid plan 1",
+                    "metadata": {
+                        "created": "2021-09-01T06:14:16.542Z",
+                        "updated": "2021-09-01T15:09:06.681Z"
+                    }
+                },
+                {
+                    "id": "3y9yed99-6471-47e9-8b8d-269345fb1de8",
+                    "name": "paid-plan2",
+                    "description": "Paid plan for OSB",
+                    "metadata": {
+                        "created": "2021-09-01T06:14:18.716Z",
+                        "updated": "2021-09-02T08:08:49.368Z"
+                    }
+                }
+            ],
+            "metadata": {
+                "type": "private",
+                "longDescription": "OSB Test SDK Sample",
+                "displayName": "OSB Test SDK Sample",
+                "imageUrl": "https://ibm.com",
+                "featuredImageUrl": "https://ibm.com",
+                "smallImageUrl": "https://ibm.com",
+                "mediumImageUrl": "https://ibm.com",
+                "documentationUrl": "https://ibm.com",
+                "termsUrl": "https://ibm.com",
+                "instructionsUrl": "https://ibm.com",
+                "parameters": [],
+                "created": "2021-08-17T07:00:17.156Z",
+                "updated": "2021-09-03T11:34:38.967Z"
+            }
+        }
+    ]
+}

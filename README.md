@@ -289,3 +289,8 @@ The CLI tool also provides a single command that both builds and deploys the the
 - Publish the Broker
 - Publish the deployment
 - You are all set! -->
+
+</br>
+
+## Guide for ui changes
+[see this](client/README.md)

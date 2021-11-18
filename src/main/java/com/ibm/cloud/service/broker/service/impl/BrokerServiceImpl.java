@@ -76,9 +76,7 @@ public class BrokerServiceImpl implements BrokerService {
     private static final String INSTANCE_STATE = "state";
     private static final String DISPLAY_NAME = "displayName";
     
-    private static final String PROVISION_STATUS_API = "/provision_status";
-    
-    private static final String INSTANCE_DETAILS_API = "/#/instance_details?type=";
+    private static final String PROVISION_STATUS_API = "/provision_status?type=";
     
     private static final String INSTANCE_ID = "&instance_id=";
 
@@ -103,7 +101,7 @@ public class BrokerServiceImpl implements BrokerService {
                 String displayName = getServiceMetaDataByAttribute(DISPLAY_NAME);
                 StringBuilder responseUrl = new StringBuilder();
                 responseUrl.append(dashboardUrl)
-                .append(INSTANCE_DETAILS_API)
+                .append(PROVISION_STATUS_API)
                 .append((displayName != null) ? displayName : catalog.getServiceDefinitions().get(0).getName())
                 .append(INSTANCE_ID)
                 .append(instanceId);
