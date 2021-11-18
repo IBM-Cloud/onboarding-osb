@@ -17,8 +17,6 @@ package com.ibm.cloud.service.broker.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.cloud.service.broker.model.Catalog;
-import com.ibm.cloud.service.broker.model.InstanceDto;
-import com.ibm.cloud.service.broker.model.Plan;
 import com.ibm.cloud.service.broker.service.BrokerService;
 import com.ibm.cloud.service.broker.util.BrokerUtil;
 import java.io.IOException;
@@ -363,9 +361,42 @@ public class BrokerControler {
   }
 
   @GetMapping("provision_status")
-  public ResponseEntity<String> getProvisionStatus() {
-    return ResponseEntity
-      .status(HttpStatus.OK)
-      .body("Successfully Provisioned the Instance !!");
+  public String get(final HttpServletRequest httpServletRequest)
+    throws Exception {
+    String instance_id = httpServletRequest.getParameter("instance_id");
+    String type = httpServletRequest.getParameter("type");
+
+    StringBuilder homepage = new StringBuilder();
+    homepage
+      .append(
+        "<html>" +
+        "<style>" +
+        "body{font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; padding: 10px}" +
+        ".flex-wrapper{display: flex; flex-direction: column;}" +
+        ".flex-row{display: flex; flex-direction: row; margin-top: 5px}" +
+        ".strong-div{min-width: 10%;}" +
+        ".hr-short{width: 100%; background: lightgrey;}" +
+        "</style>" +
+        "<body><h4>Deployment Details</h4>"
+      )
+      .append("<div class=\"flex-wrapper\">")
+      .append(
+        "<div class=\"flex-row\">" +
+        "<div class=\"strong-div\"><strong>Type</strong></div>" +
+        "<div>"+ type +"</div>" +
+        "</div>"
+      )
+      .append(
+        "<hr class=\"hr-short\"/>"
+      )
+      .append(
+        "<div class=\"flex-row\">" +
+        "<div class=\"strong-div\"><strong>Instance ID</strong></div>" +
+        "<div>" + instance_id + "</div>" +
+        "</div>"
+      )
+      .append("</div>")
+      .append("</body></html>");
+    return homepage.toString();
   }
 }

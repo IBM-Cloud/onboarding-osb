@@ -175,7 +175,7 @@ window.env = {
   "npm_package_dependencies__testing_library_jest_dom": "^5.14.1",
   "npm_package_dependencies__testing_library_react": "^11.2.7",
   "npm_package_dependencies__testing_library_user_event": "^12.8.3",
-  "npm_package_description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "npm_package_description": "## 1.Prerequisite  - node 14.17.* or newer - node 6.14.13 or newer - `suggested: Lastest LTS node install`",
   "npm_package_eslintConfig_extends_0": "react-app",
   "npm_package_eslintConfig_extends_1": "react-app/jest",
   "npm_package_name": "osb-broker-ui",

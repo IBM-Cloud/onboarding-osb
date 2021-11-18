@@ -1,7 +1,6 @@
 
 import './App.scss';
 import Default from './components/Default/Default';
-import InstanceDetails from './components/InstanceDetails/InstanceDetails';
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,7 +16,6 @@ function App() {
         <HashRouter>
           <Switch>
             <Route exact path="/" component={Default} />
-            <Route exact path="/instance_details" component={InstanceDetails} />
             <Redirect from="*" to="/" />
           </Switch>
         </HashRouter>
