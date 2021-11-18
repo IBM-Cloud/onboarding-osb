@@ -160,6 +160,8 @@ Our next step now is to deploy the broker application image we just created. The
     - Select resource group to target for IBM Code Engine. This is value in the  `Resource group` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
   - CE_REGISTRY_SECRET_NAME
     - Select an exisitg registry access from your project or [create one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-add-registry#add-registry-access-ce)
+  - PC_URL [optional]
+    - Partner Center url for dashboard. use [this](https://cloud.ibm.com/partner-center/sell) to see your applications and copy url.
 
 
     
@@ -201,6 +203,8 @@ Running the below command in your terminal will deploy your app to IBM Code Engi
     - Name of organization to be targeted for deployment. Your orgs can be found [here](https://cloud.ibm.com/account/cloud-foundry)
   - CF_SPACE
     -  Name of space to be targeted for deployment. After selecting your Org [here](https://cloud.ibm.com/account/cloud-foundry), a list of available spaces can be seen.
+  - PC_URL [optional]
+    - Partner Center url for dashboard. use [this](https://cloud.ibm.com/partner-center/sell) to see your applications and copy url.
 
   
       <br />
@@ -285,3 +289,8 @@ The CLI tool also provides a single command that both builds and deploys the the
 - Publish the Broker
 - Publish the deployment
 - You are all set! -->
+
+</br>
+
+## Guide for ui changes
+[see this](client/README.md)

@@ -1,0 +1,50 @@
+@import "../../styles/global.scss";
+
+.instances-info {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+  margin-left: 0rem;
+  margin-right: 0rem;
+}
+
+.bx--data-table tbody tr,
+.bx--data-table tbody tr td,
+.bx--data-table tbody tr th,
+.bx--table-toolbar {
+  background-color: $ui-02;
+}
+
+.bx--child-row-inner-container {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.fill-link {
+  fill: $interactive-01;
+}
+
+.test-metric-btn {
+  margin-bottom: 1rem;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.metric-desc {
+  width: 70%;
+  margin-bottom: 1rem;
+}
+
+.metric-table {
+  width: 95%;
+}
+
+.empty-message{
+  margin-top:1rem;
+  margin-bottom:1rem;
+  padding: 1rem;
+}

@@ -50,6 +50,7 @@ readarray -d / -t strarr <<<"$BROKER_ICR_NAMESPACE_URL"
 NAMESPACE=${strarr[1]}
 
 echo "checking namespace."
+echo "new namespace will be created if failed to find namespace with name $NAMESPACE"
 create_namespace=`ibmcloud cr namespace-add -g $ICR_RESOURCE_GROUP $NAMESPACE`
 
 if [[ $create_namespace == *"OK"* ]]; then

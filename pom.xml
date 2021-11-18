@@ -105,7 +105,7 @@
               <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/client</directory>
+                  <directory>${basedir}/client/build</directory>
                 </resource>
               </resources>
             </configuration>
