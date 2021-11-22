@@ -55,6 +55,7 @@ get-catalog:
 	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
 
 build:
+	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	@./deploy/check_build_config.sh
@@ -66,28 +67,40 @@ build:
 	@./deploy/docker_login.sh
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) cleanup-build
+	@echo ""
+	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	@rm _time_$@.txt
 
 deploy:
 	@echo ""
 	@echo "available options: make deploy-cf"
 
 deploy-cf:
+	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) cf-env || $(MAKE) env-error
 	@./deploy/cf/check_deploy_config_cf.sh
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
 	$(MAKE) cleanup-deploy-cf
+	@echo ""
+	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	@rm _time_$@.txt
 
 deploy-ce:
+	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) ce-env || $(MAKE) env-error
 	@./deploy/ce/check_deploy_config_ce.sh
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
 	$(MAKE) cleanup-deploy-ce
+	@echo ""
+	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	@rm _time_$@.txt
 
 build-deploy-cf:
+	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	$(MAKE) cf-env || $(MAKE) env-error
@@ -98,8 +111,12 @@ build-deploy-cf:
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
 	$(MAKE) cleanup-build
 	$(MAKE) cleanup-deploy-cf
+	@echo ""
+	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	@rm _time_$@.txt
 
 build-deploy-ce:
+	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	$(MAKE) ce-env || $(MAKE) env-error
@@ -110,6 +127,9 @@ build-deploy-ce:
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
 	$(MAKE) cleanup-build
 	$(MAKE) cleanup-deploy-ce
+	@echo ""
+	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	@rm _time_$@.txt
 
 # Helper Goals
 
