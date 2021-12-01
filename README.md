@@ -17,7 +17,7 @@ As you onboard through Partner Center or RMC, you will  be required to provide y
 
 > Note that this broker is not recommended being used in production but it to be used as a reference to build your production broker
 
-## Introduction to Onboarding vs Deployment IBM Cloud Accounts
+## Whats is an Onboarding and a Deployment IBM Cloud Account
 In the sections to follow you will come across many references to Onboarding and Deployment IBM Cloud account. This section tries do demystify the two.
 
 #### _Onboarding IBM Cloud Account_ 
@@ -73,9 +73,17 @@ is the cloud account under which you will be deploying your broker app using eit
 
       You may follow [this](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#create_user_key) document to create the API keys. Once created, save the API key values to a safe location on your local machine.  
 
-4. #### Create a ServiceID and API Key (for metering)
+4. #### Create an API Key for Metering
 
-    To be able to test metering on your SaaS service, a new ServiceID need to be created in the [Onboarding IBM Cloud account](#onboarding-ibm-cloud-account). The service ID can be created [here](https://cloud.ibm.com/iam/serviceids). Once created, click the 3 dot menu and unlock the serviceID. Next select the ServiceID row to go to the details page and create an API key for the Service ID. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
+    The Reference Broker provides a dashboard that allows you to send test metering data to BSS for your service. To be able to do so your metering Service ID and API key need to be setup.  
+    If you are onboarding via [Partner Center](https://cloud.ibm.com/partner-center/sell), the Service ID and API key  by 
+    - Navigating to _My products -> Dashboard_ 
+    - Click on the _Create Service ID_ button
+    - Create an API key for the Service ID using the _Create API key_ link on the same page. 
+    
+    Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
+
+    If you are onboarding via RMC, the Service ID is created from the _Access (IAM)_ page. Once created, find your service it listed [here](https://cloud.ibm.com/iam/serviceids). Next, click the 3 dot menu and click _Unlock_ to unlock the serviceID for BSS. Next, got ot the API Keys tab and create an API key for it. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
 
     - METERING_API_KEY
 
