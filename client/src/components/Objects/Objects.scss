@@ -1,0 +1,19 @@
+@import "../../styles/global.scss";
+
+.object-info {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+  margin-left: 0rem;
+  margin-right: 0rem;
+}
+
+.bx--data-table tbody tr, .bx--data-table tbody tr td, .bx--data-table tbody tr th, .bx--table-toolbar{
+  background-color: $ui-02;
+}
+
+.fill-link {
+  fill: $interactive-01;
+}

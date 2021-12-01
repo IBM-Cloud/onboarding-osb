@@ -27,5 +27,11 @@ application-local.properties
 /.nb-gradle/
 build/
 
+### React build ###
+!**/client/build
+
 ### VS Code ###
 .vscode/
+
+### ignored files ###
+_time_**

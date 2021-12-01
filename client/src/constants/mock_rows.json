@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "name": "osb-sample",
+    "kind": "Service",
+    "objectId": "63d69f00-ff28-4785-85f8-13bde6620390",
+    "updated": "2021-10-15"
+  },
+  {
+    "id": "2",
+    "name": "lite",
+    "kind": "Pricing plan",
+    "objectId": "63d69f00-ff28-4785-85f8-13bde6620390",
+    "updated": "2021-10-15"
+  },
+  {
+    "id": "3",
+    "name": "usage-based",
+    "kind": "Pricing plan",
+    "objectId": "63d69f00-ff28-4785-85f8-13bde6620390",
+    "updated": "2021-10-15"
+  }
+]

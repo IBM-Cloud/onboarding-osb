@@ -36,6 +36,7 @@ public class SupportInfoServiceImpl implements SupportInfoService {
     private static final String USAGE_ENDPOINT = "USAGE_ENDPOINT";
     private static final String IS_METERING_API_KEY_SET = "IS_METERING_APIKEY_SET";
     private static final String BROKER_URL = "BROKER_URL";
+    private static final String PC_URL = "PC_URL";
 
 
     @Value("${app.build.number}")
@@ -48,6 +49,8 @@ public class SupportInfoServiceImpl implements SupportInfoService {
     private String metringApikey;
     @Value("${broker.url}")
     private String brokerUrl;
+    @Value("${partner.center.url}")
+    private String partnerCenterUrl;
 
 
     @Autowired
@@ -73,6 +76,7 @@ public class SupportInfoServiceImpl implements SupportInfoService {
         metadata.put(IAM_ENDPOINT, iamEndpoint);
         metadata.put(USAGE_ENDPOINT, usageEndpoint);
         metadata.put(BROKER_URL, brokerUrl);
+        metadata.put(PC_URL, partnerCenterUrl);
         metadata.put(IS_METERING_API_KEY_SET, (!"".equals(metringApikey)) ? true : false);
         return new ObjectMapper().writeValueAsString(metadata);
     }

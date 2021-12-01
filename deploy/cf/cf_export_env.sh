@@ -10,6 +10,7 @@ C_BROKER_PASSWORD=`cat ${CONFIG_FILE} | grep BROKER_PASSWORD | cut -d'=' -f2`
 C_BROKER_ICR_NAMESPACE_URL=`cat ${CONFIG_FILE} | grep BROKER_ICR_NAMESPACE_URL | cut -d'=' -f2`
 C_ICR_IMAGE=`cat ${CONFIG_FILE} | grep ICR_IMAGE | cut -d'=' -f2`
 C_ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
+C_PC_URL=`cat ${CONFIG_FILE} | grep PC_URL | cut -d'=' -f2`
 
 EMPTY='""'
 
@@ -32,4 +33,5 @@ ICR_IMAGE=$(getVar ICR_IMAGE)
 CF_API=$(getVar CF_API)
 CF_ORGANIZATION=$(getVar CF_ORGANIZATION)
 CF_SPACE=$(getVar CF_SPACE)
-ONBOARDING_ENV=$(getVar ONBOARDING_ENV)" > deploy/cf/cf.config.properties
+ONBOARDING_ENV=$(getVar ONBOARDING_ENV)
+PC_URL=$(getVar PC_URL)" > deploy/cf/cf.config.properties

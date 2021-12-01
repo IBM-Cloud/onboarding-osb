@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${service.broker.password}")
     private String pass;
     
-    private static final String[] OPEN_URLS = {"/provision_status/**"};
+    private static final String[] OPEN_URLS = {"/provision_status"};
     private static final String AUTH_URL = "/**";
 
     @Override
@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
          //  Remove this line when h2 console not needed
          http.headers().httpStrictTransportSecurity().maxAgeInSeconds(31536000).includeSubDomains(true).preload(true).and()
+         .contentSecurityPolicy("frame-ancestors self *.ibm.com").and()
          .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN).and().contentTypeOptions().and().frameOptions()
          .sameOrigin();
     }

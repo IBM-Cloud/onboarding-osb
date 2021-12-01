@@ -74,8 +74,11 @@ public class BrokerServiceImpl implements BrokerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BrokerServiceImpl.class);
     
     private static final String INSTANCE_STATE = "state";
+    private static final String DISPLAY_NAME = "displayName";
     
-    private static final String PROVISION_STATUS_API = "/provision_status/";
+    private static final String PROVISION_STATUS_API = "/provision_status?type=";
+    
+    private static final String INSTANCE_ID = "&instance_id=";
 
     @Override
     public ResponseEntity<String> provision(String instanceId, JsonNode json, String iamId, String region) throws Exception {
@@ -94,7 +97,15 @@ public class BrokerServiceImpl implements BrokerService {
                 serviceInstanceRepository.save(serviceInstance);
                 LOGGER.info("Service Instance created: instanceId: {} status: {} planId: {}", instanceId,
                         serviceInstance.getStatus(), plan.getId());
-                response.put(BrokerUtil.DASHBOARD_URL, dashboardUrl + PROVISION_STATUS_API + instanceId);
+                
+                String displayName = getServiceMetaDataByAttribute(DISPLAY_NAME);
+                StringBuilder responseUrl = new StringBuilder();
+                responseUrl.append(dashboardUrl)
+                .append(PROVISION_STATUS_API)
+                .append((displayName != null) ? displayName : catalog.getServiceDefinitions().get(0).getName())
+                .append(INSTANCE_ID)
+                .append(instanceId);
+                response.put(BrokerUtil.DASHBOARD_URL, responseUrl);
             } else {
                 LOGGER.error("Plan id:{} does not belong to this service: {}", createServiceRequest.getPlanId(), createServiceRequest.getServiceId());
                 return ResponseEntity.status(422).body("Invalid plan id: " + createServiceRequest.getPlanId());
@@ -112,7 +123,15 @@ public class BrokerServiceImpl implements BrokerService {
         return ResponseEntity.status(status).body(strResponse);
     }
 
-    
+    private String getServiceMetaDataByAttribute(String attribute) {
+    	ServiceDefinition service = catalog.getServiceDefinitions().get(0);
+    	if (service != null && service.getMetadata() != null) {
+    		if (service.getMetadata().containsKey(attribute) && service.getMetadata().get(attribute) != null) {
+    			return service.getMetadata().get(attribute).toString();
+    		}
+    	}
+    	return null;
+    }
 
     @Override
     public ResponseEntity<String> deprovision(String instanceId, String planId, String serviceId, String iamId) throws Exception {

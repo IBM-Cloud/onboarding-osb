@@ -1,0 +1,91 @@
+@import "../../styles/global.scss";
+
+.container {
+  padding: 1rem;
+  padding-top: 2rem;
+}
+
+.svg-left {
+  margin-left: 1.5rem;
+}
+
+.svg-right {
+  margin-left: 0.5rem;
+}
+
+.fill-green {
+  fill: $support-02;
+}
+
+.fill-link {
+  fill: $interactive-01;
+}
+
+.link-blank {
+  padding-top: 1rem;
+  text-align: end;
+  padding-right: 3rem;
+}
+
+.link-left {
+  text-align: end;
+}
+
+.inline-link{
+  margin-left: 0.5rem;
+}
+
+.bx--link{
+  cursor: pointer;
+}
+
+.broker-info {
+  margin-top: 3rem;
+  background-color: $ui-02;
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+.sub-row{
+	margin-top: 2rem;
+}
+
+.bx--snippet--single{
+	width: fit-content;
+}
+
+.tableToggle{
+  float: right;
+  margin-bottom: 2rem;
+}
+
+.modal-trigger, .bx--modal-close{
+  display: none;
+}
+
+.login-modal{
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.login-modal .bx--label{
+  margin-top: 1rem;
+}
+
+.login-btn{
+  float: right;
+  margin-top: 1rem;
+}
+
+.display{
+  // default display
+}
+
+.none{
+  display: none;
+}
+
+.bx--skeleton__text{
+  display: inline-block;
+  margin-bottom: 0;
+}
