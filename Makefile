@@ -52,7 +52,7 @@ get-catalog:
 	@echo "Getting catalog.json"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
+	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
 
 build:
 	date +%s > _time_$@.txt
@@ -64,7 +64,7 @@ build:
 	@echo "Logging to ibm container registry on docker"
 	@echo "*******************************************************************************"
 	@echo ""
-	@./deploy/docker_login.sh
+	@./deploy/docker_login.sh || $(MAKE) cleanup-build
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) cleanup-build
 	@echo ""
@@ -91,7 +91,7 @@ deploy-ce:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) ce-env || $(MAKE) env-error
-	@./deploy/ce/check_deploy_config_ce.sh
+	@./deploy/ce/check_deploy_config_ce.sh 
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
 	$(MAKE) cleanup-deploy-ce
@@ -159,8 +159,8 @@ build-job:
 	@echo "Building and pushing image to ibm container registry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
-	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-build osb-img
+	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
+	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties --name osb-container-build osb-img
 	@./deploy/build_image.sh $(shell pwd)
 
 deploy-job-cf:
@@ -170,7 +170,7 @@ deploy-job-cf:
 	@echo "Deploying image to cloudfoundry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
+	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.temp.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
 
 deploy-job-ce:
 	@echo  starting deploy...
@@ -180,20 +180,20 @@ deploy-job-ce:
 	@echo "*******************************************************************************"
 	@echo ""
 	@./deploy/ce/ce_export_env.sh
-	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
+	$(shell export $(cat deploy/ce/ce.config.temp.properties | xargs) > /dev/null)
+	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.temp.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:
 	@./deploy/build_export_env.sh
-	$(shell export $(cat deploy/build.config.properties | xargs) > /dev/null)
+	$(shell export $(cat deploy/build.config.temp.properties | xargs) > /dev/null)
 
 ce-env:
 	@./deploy/ce/ce_export_env.sh
-	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
+	$(shell export $(cat deploy/ce/ce.config.temp.properties | xargs) > /dev/null)
 	
 cf-env:
 	@./deploy/cf/cf_export_env.sh
-	$(shell export $(cat deploy/cf/cf.config.properties | xargs) > /dev/null)
+	$(shell export $(cat deploy/cf/cf.config.temp.properties | xargs) > /dev/null)
 
 error:
 	@echo  ......Error encountered......
@@ -244,18 +244,21 @@ cleanup-build:
 	@sudo docker container rm osb-container-namespace > /dev/null || $(MAKE) skip-message
 	@sudo docker container stop osb-container-build > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
+	@rm deploy/build.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
 
 cleanup-deploy-cf:
 	@echo  ......cleaning up after cf deploy
 	@sudo docker container stop osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
+	@rm deploy/cf/cf.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
 
 cleanup-deploy-ce:
 	@echo  ......cleaning up after ce deploy
 	@sudo docker container stop osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
+	@rm deploy/ce/ce.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
 
 skip-message:

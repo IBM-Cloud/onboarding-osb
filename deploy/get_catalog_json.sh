@@ -5,7 +5,6 @@ GC_TEST_URL="https://globalcatalog.test.cloud.ibm.com"
 GC_PROD_URL="https://globalcatalog.cloud.ibm.com"
 
 echo "Getting Access Token"
-echo "ONBOARDING ENV: $ONBOARDING_ENV"
 if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
 	IAM_URL=$IAM_TEST_URL
 	GC_URL=$GC_TEST_URL

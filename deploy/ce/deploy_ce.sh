@@ -6,6 +6,12 @@ echo "---------- Logging in ibmcloud ----------"
 BUILD_NUMBER=`./deploy/generate_build_number.sh`
 EMPTY='""'
 
+
+ICR_BASE=icr.io
+if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+	ICR_BASE=stg.icr.io
+fi
+
 IAM_ENDPOINT_TEST="https://iam.test.cloud.ibm.com"
 IAM_ENDPOINT_PROD="https://iam.cloud.ibm.com"
 USAGE_ENDPOINT_TEST="https://billing.test.cloud.ibm.com"
@@ -34,10 +40,10 @@ GET_CE_REG=`ibmcloud ce registry get -n $CE_REGISTRY_SECRET_NAME`
 
 if [[ $GET_CE_REG == *"OK"* ]]; then
 	echo "updating $CE_REGISTRY_SECRET_NAME...";
-	ibmcloud ce registry update -n $CE_REGISTRY_SECRET_NAME -p $DEPLOYMENT_IAM_API_KEY -u iamapikey
+	ibmcloud ce registry update -s $ICR_BASE -n $CE_REGISTRY_SECRET_NAME -p $DEPLOYMENT_IAM_API_KEY -u iamapikey
 else
 	echo "creating $CE_REGISTRY_SECRET_NAME...";
-	ibmcloud ce registry create -n $CE_REGISTRY_SECRET_NAME -p $DEPLOYMENT_IAM_API_KEY -u iamapikey
+	ibmcloud ce registry create -s $ICR_BASE -n $CE_REGISTRY_SECRET_NAME -p $DEPLOYMENT_IAM_API_KEY -u iamapikey
 fi
 
 echo ""
