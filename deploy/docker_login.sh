@@ -31,6 +31,5 @@ getGenVar()
 	echo "${!cVarName}"
 }
 
-echo "---- -u iamapikey -p $DEPLOYMENT_IAM_API_KEY $(getGenVar BROKER_ICR_NAMESPACE_URL)/$(getGenVar ICR_IMAGE) ----"
 sudo docker logout
 sudo docker login -u iamapikey -p $DEPLOYMENT_IAM_API_KEY $(getGenVar BROKER_ICR_NAMESPACE_URL)/$(getGenVar ICR_IMAGE)

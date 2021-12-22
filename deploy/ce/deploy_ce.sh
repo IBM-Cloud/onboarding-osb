@@ -7,9 +7,11 @@ BUILD_NUMBER=`./deploy/generate_build_number.sh`
 EMPTY='""'
 
 
+IBM_API_ENDPOINT="https://cloud.ibm.com"
 ICR_BASE=icr.io
 if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
 	ICR_BASE=stg.icr.io
+	IBM_API_ENDPOINT="https://test.cloud.ibm.com"
 fi
 
 IAM_ENDPOINT_TEST="https://iam.test.cloud.ibm.com"
@@ -28,7 +30,7 @@ fi
 ./deploy/ce/handle_ce_project.sh
 
 ibmcloud config --check-version=false
-ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP
+ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -a $IBM_API_ENDPOINT -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud target -r $CE_REGION -g $CE_RESOURCE_GROUP
 ibmcloud ce project select -n $CE_PROJECT
 

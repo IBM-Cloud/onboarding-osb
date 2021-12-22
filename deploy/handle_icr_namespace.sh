@@ -3,7 +3,12 @@
 LOGIN_RESULT=""
 TARGET_RESULT=""
 
-LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY --no-region`"
+IBM_API_ENDPOINT="https://cloud.ibm.com"
+if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+	IBM_API_ENDPOINT="https://test.cloud.ibm.com"
+fi
+
+LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -a $IBM_API_ENDPOINT --no-region`"
 if [[ $LOGIN_RESULT == *"FAILED"* ]]; then
 	echo "$LOGIN_RESULT"
 	echo "Error with ibmcloud login. check the logs above."

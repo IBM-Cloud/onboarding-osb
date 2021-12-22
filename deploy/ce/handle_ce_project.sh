@@ -1,7 +1,13 @@
 #!/bin/bash
 
 ibmcloud config --check-version=false
-LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -r $CE_REGION -g $CE_RESOURCE_GROUP`"
+
+IBM_API_ENDPOINT="https://cloud.ibm.com"
+if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+	IBM_API_ENDPOINT="https://test.cloud.ibm.com"
+fi
+
+LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -a $IBM_API_ENDPOINT -r $CE_REGION -g $CE_RESOURCE_GROUP`"
 if [[ $LOGIN_RESULT == *"FAILED"* ]]; then
 	echo "$LOGIN_RESULT"
 	echo "Error with ibmcloud login. check the logs above."
