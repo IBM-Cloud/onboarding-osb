@@ -58,7 +58,7 @@ build:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
+	@./deploy/check_build_config.sh  || $(MAKE) cleanup-build
 	@echo ""
 	@echo "*******************************************************************************"
 	@echo "Logging to ibm container registry on docker"
@@ -79,7 +79,7 @@ deploy-cf:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) cf-env || $(MAKE) env-error
-	@./deploy/cf/check_deploy_config_cf.sh
+	@./deploy/cf/check_deploy_config_cf.sh || $(MAKE) cleanup-deploy-cf
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
 	$(MAKE) cleanup-deploy-cf
@@ -91,7 +91,7 @@ deploy-ce:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) ce-env || $(MAKE) env-error
-	@./deploy/ce/check_deploy_config_ce.sh 
+	@./deploy/ce/check_deploy_config_ce.sh || $(MAKE) cleanup-deploy-ce
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
 	$(MAKE) cleanup-deploy-ce
@@ -104,8 +104,8 @@ build-deploy-cf:
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	$(MAKE) cf-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
-	@./deploy/cf/check_deploy_config_cf.sh
+	@./deploy/check_build_config.sh || $(MAKE) cleanup-build
+	@./deploy/cf/check_deploy_config_cf.sh || $(MAKE) cleanup-deploy-cf
 	@./deploy/docker_login.sh
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
@@ -120,8 +120,8 @@ build-deploy-ce:
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	$(MAKE) ce-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
-	@./deploy/ce/check_deploy_config_ce.sh
+	@./deploy/check_build_config.sh || $(MAKE) cleanup-build
+	@./deploy/ce/check_deploy_config_ce.sh || $(MAKE) cleanup-deploy-ce
 	@./deploy/docker_login.sh 
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
@@ -246,6 +246,7 @@ cleanup-build:
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
 	@rm deploy/build.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
+	@exit 1
 
 cleanup-deploy-cf:
 	@echo  ......cleaning up after cf deploy
@@ -253,6 +254,7 @@ cleanup-deploy-cf:
 	@sudo docker container rm osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
 	@rm deploy/cf/cf.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
+	@exit 1
 
 cleanup-deploy-ce:
 	@echo  ......cleaning up after ce deploy
@@ -260,6 +262,7 @@ cleanup-deploy-ce:
 	@sudo docker container rm osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
 	@rm deploy/ce/ce.config.temp.properties > /dev/null || $(MAKE) skip-message
 	@echo "Done."
+	@exit 1
 
 skip-message:
 	@echo 

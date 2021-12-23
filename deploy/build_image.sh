@@ -36,8 +36,7 @@ ICR_IMAGE=$(getGenVar ICR_IMAGE)
 sudo docker build -f Dockerfile -t $ICR_IMAGE $1
 sudo docker tag $ICR_IMAGE $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE
 RESULT="`sudo docker push $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE`"
-
-if [[ $RESULT == *"Pushed"* ]]; then
+if [[ $RESULT == *"Pushed"* || $RESULT == *"digest"* ]]; then
 	echo ""
 	echo "*******************************************************************************"
 	echo "|                                                                   "
