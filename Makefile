@@ -66,9 +66,9 @@ build:
 	@echo ""
 	@./deploy/docker_login.sh || $(MAKE) cleanup-build
 	$(MAKE) build-job || $(MAKE) cleanup-build
-	$(MAKE) cleanup-build
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-build
 	@rm _time_$@.txt
 
 deploy:
@@ -82,9 +82,9 @@ deploy-cf:
 	@./deploy/cf/check_deploy_config_cf.sh || $(MAKE) cleanup-deploy-cf
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
-	$(MAKE) cleanup-deploy-cf
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-deploy-cf
 	@rm _time_$@.txt
 
 deploy-ce:
@@ -94,9 +94,9 @@ deploy-ce:
 	@./deploy/ce/check_deploy_config_ce.sh || $(MAKE) cleanup-deploy-ce
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
-	$(MAKE) cleanup-deploy-ce
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-deploy-ce
 	@rm _time_$@.txt
 
 build-deploy-cf:
@@ -109,10 +109,10 @@ build-deploy-cf:
 	@./deploy/docker_login.sh
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
-	$(MAKE) cleanup-build
-	$(MAKE) cleanup-deploy-cf
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-build
+	$(MAKE) cleanup-deploy-cf
 	@rm _time_$@.txt
 
 build-deploy-ce:
@@ -125,10 +125,10 @@ build-deploy-ce:
 	@./deploy/docker_login.sh 
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
-	$(MAKE) cleanup-build
-	$(MAKE) cleanup-deploy-ce
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-build
+	$(MAKE) cleanup-deploy-ce
 	@rm _time_$@.txt
 
 # Helper Goals
@@ -245,6 +245,7 @@ cleanup-build:
 	@sudo docker container stop osb-container-build > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
 	@rm deploy/build.config.temp.properties > /dev/null || $(MAKE) skip-message
+	@rm _time_build.txt || $(MAKE) skip-message
 	@echo "Done."
 	@exit 1
 
@@ -253,6 +254,8 @@ cleanup-deploy-cf:
 	@sudo docker container stop osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
 	@rm deploy/cf/cf.config.temp.properties > /dev/null || $(MAKE) skip-message
+	@rm _time_deploy-cf.txt || $(MAKE) skip-message
+	@rm _time_build-deploy-cf.txt || $(MAKE) skip-message
 	@echo "Done."
 	@exit 1
 
@@ -261,6 +264,8 @@ cleanup-deploy-ce:
 	@sudo docker container stop osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
 	@rm deploy/ce/ce.config.temp.properties > /dev/null || $(MAKE) skip-message
+	@rm _time_deploy-ce.txt || $(MAKE) skip-message
+	@rm _time_build-deploy-ce.txt || $(MAKE) skip-message
 	@echo "Done."
 	@exit 1
 
