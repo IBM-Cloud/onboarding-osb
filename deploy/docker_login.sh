@@ -4,7 +4,7 @@ echo ""
 echo "Logging in docker..."
 
 ICR_BASE=icr.io
-if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+if [ "$DEPLOYMENT_ENV" = "stage" ] || [ "$DEPLOYMENT_ENV" = "STAGE" ]; then
 	ICR_BASE=stg.icr.io
 fi
 

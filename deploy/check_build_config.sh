@@ -3,12 +3,13 @@
 CONFIG_FILE=deploy/build.config.temp.properties
 GC_OBJECT_ID=`cat ${CONFIG_FILE} | grep GC_OBJECT_ID | cut -d'=' -f2`
 ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
-ICR_NAMESPACE_REGION=`cat ${CONFIG_FILE} | grep ICR_NAMESPACE_REGION | cut -d'=' -f2`
+DEPLOYMENT_ENV=`cat ${CONFIG_FILE} | grep DEPLOYMENT_ENV | cut -d'=' -f2`
+PREFIX=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`
 
 EMPTY='""'
 echo ""
 echo "---------- Checking configuration ----------"
-if [ -z $ICR_NAMESPACE_REGION ] || [ $ICR_NAMESPACE_REGION == $EMPTY ] || [ -z $ONBOARDING_ENV ] || [ $ONBOARDING_ENV == $EMPTY ] || [ -z $GC_OBJECT_ID ] || [ $GC_OBJECT_ID == $EMPTY ];
+if [ -z $PREFIX ] || [ $PREFIX == $EMPTY ] || [ -z $ONBOARDING_ENV ] || [ $ONBOARDING_ENV == $EMPTY ] || [ -z $DEPLOYMENT_ENV ] || [ $DEPLOYMENT_ENV == $EMPTY ] || [ -z $GC_OBJECT_ID ] || [ $GC_OBJECT_ID == $EMPTY ];
 then
 	echo ""
 	echo "*******************************************************************************"

@@ -5,13 +5,16 @@ BROKER_USERNAME=`cat ${CONFIG_FILE} | grep BROKER_USERNAME | cut -d'=' -f2`
 BROKER_PASSWORD=`cat ${CONFIG_FILE} | grep BROKER_PASSWORD | cut -d'=' -f2`
 CE_REGION=`cat ${CONFIG_FILE} | grep CE_REGION | cut -d'=' -f2`
 CE_RESOURCE_GROUP=`cat ${CONFIG_FILE} | grep CE_RESOURCE_GROUP | cut -d'=' -f2`
+ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
+DEPLOYMENT_ENV=`cat ${CONFIG_FILE} | grep DEPLOYMENT_ENV | cut -d'=' -f2`
+PREFIX=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`
 
 EMPTY='""'
 
 echo ""
 echo "---------- Checking configuration ----------"
 
-if [ -z $BROKER_USERNAME ] || [ $BROKER_USERNAME == $EMPTY ] || [ -z $BROKER_PASSWORD ] || [ $BROKER_PASSWORD == $EMPTY ] || [ -z $CE_REGION ] || [ $CE_REGION == $EMPTY ] || [ -z $CE_RESOURCE_GROUP ] || [ $CE_RESOURCE_GROUP == $EMPTY ];
+if [ -z $PREFIX ] || [ $PREFIX == $EMPTY ] || [ -z $BROKER_USERNAME ] || [ $BROKER_USERNAME == $EMPTY ] || [ -z $BROKER_PASSWORD ] || [ $BROKER_PASSWORD == $EMPTY ] || [ -z $CE_REGION ] || [ $CE_REGION == $EMPTY ] || [ -z $CE_RESOURCE_GROUP ] || [ $CE_RESOURCE_GROUP == $EMPTY ] || [ -z $ONBOARDING_ENV ] || [ $ONBOARDING_ENV == $EMPTY ] || [ -z $DEPLOYMENT_ENV ] || [ $DEPLOYMENT_ENV == $EMPTY ] ;
 then 
 	echo ""
 	echo "*******************************************************************************"

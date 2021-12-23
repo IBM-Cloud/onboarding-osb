@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ICR_BASE=icr.io
-if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+if [ "$DEPLOYMENT_ENV" = "stage" ] || [ "$DEPLOYMENT_ENV" = "STAGE" ]; then
 	ICR_BASE=stg.icr.io
 fi
 
@@ -17,7 +17,9 @@ C_CE_PROJECT=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`-project
 C_CE_REGISTRY_SECRET_NAME=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`-registry-secret
 C_ICR_IMAGE=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`-img
 C_ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
+C_DEPLOYMENT_ENV=`cat ${CONFIG_FILE} | grep DEPLOYMENT_ENV | cut -d'=' -f2`
 C_PC_URL=`cat ${CONFIG_FILE} | grep PC_URL | cut -d'=' -f2`
+C_PREFIX=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`
 
 EMPTY='""'
 
@@ -48,4 +50,6 @@ CE_REGION=$(getVar CE_REGION)
 CE_RESOURCE_GROUP=$(getVar CE_RESOURCE_GROUP)
 CE_REGISTRY_SECRET_NAME=$(getGenVar CE_REGISTRY_SECRET_NAME)
 ONBOARDING_ENV=$(getVar ONBOARDING_ENV)
-PC_URL=$(getVar PC_URL)" > deploy/ce/ce.config.temp.properties
+DEPLOYMENT_ENV=$(getVar DEPLOYMENT_ENV)
+PC_URL=$(getVar PC_URL)
+PREFIX=$(getVar PREFIX)" > deploy/ce/ce.config.temp.properties

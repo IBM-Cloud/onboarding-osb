@@ -3,7 +3,7 @@
 ibmcloud config --check-version=false
 
 IBM_API_ENDPOINT="https://cloud.ibm.com"
-if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
+if [ "$DEPLOYMENT_ENV" = "stage" ] || [ "$DEPLOYMENT_ENV" = "STAGE" ]; then
 	IBM_API_ENDPOINT="https://test.cloud.ibm.com"
 fi
 
