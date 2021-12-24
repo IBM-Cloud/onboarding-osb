@@ -179,8 +179,6 @@ deploy-job-ce:
 	@echo "Deploying image to code-engine"
 	@echo "*******************************************************************************"
 	@echo ""
-	@./deploy/ce/ce_export_env.sh
-	$(shell export $(cat deploy/ce/ce.config.temp.properties | xargs) > /dev/null)
 	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.temp.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:

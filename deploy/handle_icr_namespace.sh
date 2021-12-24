@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source deploy/colorcodes.sh
+
 LOGIN_RESULT=""
 TARGET_RESULT=""
 
@@ -11,7 +13,7 @@ fi
 LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -a $IBM_API_ENDPOINT --no-region`"
 if [[ $LOGIN_RESULT == *"FAILED"* ]]; then
 	echo "$LOGIN_RESULT"
-	echo "Error with ibmcloud login. check the logs above."
+	echo -e "${Red} Error with ibmcloud login. check the logs above. ${RCol}"
 	exit 1
 else
 	echo "$LOGIN_RESULT"
@@ -20,7 +22,7 @@ fi
 TARGET_RESULT="`ibmcloud target -g $ICR_RESOURCE_GROUP`"
 if [[ $TARGET_RESULT == *"FAILED"* ]]; then
 	echo "$TARGET_RESULT"
-	echo "Error with ibmcloud target. check the logs above."
+	echo -e "${Red} Error with ibmcloud target. check the logs above. ${RCol}"
 	exit 1
 else
 	echo "$TARGET_RESULT"
@@ -35,10 +37,10 @@ echo "new namespace will be created if failed to find namespace with name $NAMES
 create_namespace=`ibmcloud cr namespace-add -g $ICR_RESOURCE_GROUP $NAMESPACE`
 
 if [[ $create_namespace == *"OK"* ]]; then
-	echo "OK
-	"
+	echo -e "${Gre} Ok
+	${RCol}"
 else
 	echo "$create_namespace"
-	echo "Error with namespace creation. check the logs above."
+	echo -e "${Red}Error with namespace creation. check the logs above. ${RCol}"
 	exit 1
 fi

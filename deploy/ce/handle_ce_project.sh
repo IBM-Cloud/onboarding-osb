@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source deploy/colorcodes.sh
+
 ibmcloud config --check-version=false
 
 IBM_API_ENDPOINT="https://cloud.ibm.com"
@@ -10,7 +12,7 @@ fi
 LOGIN_RESULT="`ibmcloud login --apikey $DEPLOYMENT_IAM_API_KEY -a $IBM_API_ENDPOINT -r $CE_REGION -g $CE_RESOURCE_GROUP`"
 if [[ $LOGIN_RESULT == *"FAILED"* ]]; then
 	echo "$LOGIN_RESULT"
-	echo "Error with ibmcloud login. check the logs above."
+	echo -e "${Red}Error with ibmcloud login. check the logs above.${RCol}"
 	exit 1
 else
 	echo "$LOGIN_RESULT"
@@ -19,7 +21,7 @@ fi
 TARGET_RESULT="`ibmcloud target -r $CE_REGION -g $CE_RESOURCE_GROUP`"
 if [[ $TARGET_RESULT == *"FAILED"* ]]; then
 	echo "$TARGET_RESULT"
-	echo "Error with ibmcloud target. check the logs above."
+	echo -e "${Red}Error with ibmcloud target. check the logs above.${RCol}"
 	exit 1
 else
 	echo "$TARGET_RESULT"
@@ -29,21 +31,21 @@ echo "checking project. new project will be created if failed to find project wi
 get_project="`ibmcloud ce project get -n $CE_PROJECT`"
 
 if [[ $get_project == *"OK"* ]]; then
-	echo "
-	Project found."
+	echo -e "${Gre}
+	Project found.${RCol}"
 else
-	echo "
+	echo -e "${Yel}
 	$CE_PROJECT does not exist."
-	echo "
-	creating $CE_PROJECT."
+	echo -e "
+	creating $CE_PROJECT.${RCol}"
 	create_project=`ibmcloud ce project create -n $CE_PROJECT`
 	if [[ $create_project == *"OK"* ]]; then
-		echo "
-		Project created."
+		echo -e "${Gre}
+		Project created.${RCol}"
 	else
 		echo "
 		$create_project"
-		echo "Error with project creation. check the logs above."
+		echo -e "${Red}Error with project creation. check the logs above.${RCol}"
 		exit 1
 	fi
 fi

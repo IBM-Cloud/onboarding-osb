@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source deploy/colorcodes.sh
+
 echo ""
 echo "---------- Logging in ibmcloud ----------"
 
@@ -58,9 +60,10 @@ echo "new application will be created if failed to find application with name $A
 APP_EXISTS="`ibmcloud ce application get -n $APP_NAME`"
 
 if [[ $APP_EXISTS == *"OK"* ]]; then
-	echo "Found
+	echo -e "${Gre}
+Found
 Updating Application
-This might take some time...";
+This might take some time...${RCol}";
 	if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
 	then
 		RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env IAM_ENDPOINT=$IAM_ENDPOINT --env USAGE_ENDPOINT=$USAGE_ENDPOINT --env PC_URL=$PC_URL --rs $CE_REGISTRY_SECRET_NAME`
@@ -68,9 +71,10 @@ This might take some time...";
 		RESULT=`ibmcloud ce application update --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env IAM_ENDPOINT=$IAM_ENDPOINT --env USAGE_ENDPOINT=$USAGE_ENDPOINT --env PC_URL=$PC_URL --env METERING_API_KEY=$METERING_API_KEY --rs $CE_REGISTRY_SECRET_NAME`
 	fi
 else
-	echo "Do not terminate...
+	echo -e "${Gre}
+Do not terminate...
 Creating new application...
-This might take some time... ";
+This might take some time...${RCol}";
 	if [ -z $METERING_API_KEY ] || [ $METERING_API_KEY == $EMPTY ];
 	then
 		RESULT=`ibmcloud ce application create --name $APP_NAME --image $BROKER_ICR_NAMESPACE_URL/$ICR_IMAGE:latest --min 1 --env BROKER_USERNAME=$BROKER_USERNAME --env BROKER_PASSWORD=$BROKER_PASSWORD --env BUILD_NUMBER=$BUILD_NUMBER --env IAM_ENDPOINT=$IAM_ENDPOINT --env USAGE_ENDPOINT=$USAGE_ENDPOINT --env PC_URL=$PC_URL --rs $CE_REGISTRY_SECRET_NAME`
@@ -89,7 +93,7 @@ if [[ $RESULT == *"OK"* ]]; then
 	fi
 
 	if [[ $UPDATE_RESULT == *"OK"* ]]; then
-		echo ""
+		echo -e "${Gre}"
 		echo "*******************************************************************************"
 		echo "Congratulations your broker is deployed!                          "
 		echo "                                                                   "
@@ -98,10 +102,10 @@ if [[ $RESULT == *"OK"* ]]; then
 		echo "                                                                   "
 		echo "Use the broker url to the register in Partner Center.                       "
 		echo "*******************************************************************************"
-		echo ""
+		echo -e "${RCol}"
 	else
 		echo "$UPDATE_RESULT"
-		echo ""
+		echo -e "${Red}"
 		echo "*******************************************************************************"
 		echo "|                         "
 		echo "|                                                                   "
@@ -109,11 +113,11 @@ if [[ $RESULT == *"OK"* ]]; then
 		echo "|                                                                   "
 		echo "|	                       "
 		echo "*******************************************************************************"
-		echo ""
+		echo -e "${RCol}"
 	fi
 else
 	echo "$RESULT"
-	echo ""
+	echo -e "${Red}"
 	echo "*******************************************************************************"
 	echo "|                         "
 	echo "|                                                                   "
@@ -121,5 +125,5 @@ else
 	echo "|                                                                   "
 	echo "|	                       "
 	echo "*******************************************************************************"
-	echo ""
+	echo -e "${RCol}"
 fi
