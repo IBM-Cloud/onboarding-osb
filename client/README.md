@@ -3,7 +3,7 @@
 ## 1.Prerequisite 
 - node 14.17.* or newer
 - node 6.14.13 or newer
-- `suggested: Lastest LTS node install`
+- `suggested: Lastest LTS node install` [See Guide](https://nodejs.org/en/)
 
 </br>
 
