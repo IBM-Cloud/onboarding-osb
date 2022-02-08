@@ -1,34 +1,35 @@
 #!/bin/bash
 
-CONFIG_FILE=deploy/build.config.properties
-BROKER_ICR_NAMESPACE_URL=`cat ${CONFIG_FILE} | grep BROKER_ICR_NAMESPACE_URL | cut -d'=' -f2`
+source deploy/colorcodes.sh
+
+CONFIG_FILE=deploy/build.config.temp.properties
 GC_OBJECT_ID=`cat ${CONFIG_FILE} | grep GC_OBJECT_ID | cut -d'=' -f2`
-ICR_IMAGE=`cat ${CONFIG_FILE} | grep ICR_IMAGE | cut -d'=' -f2`
 ONBOARDING_ENV=`cat ${CONFIG_FILE} | grep ONBOARDING_ENV | cut -d'=' -f2`
-ICR_NAMESPACE_REGION=`cat ${CONFIG_FILE} | grep ICR_NAMESPACE_REGION | cut -d'=' -f2`
+DEPLOYMENT_ENV=`cat ${CONFIG_FILE} | grep DEPLOYMENT_ENV | cut -d'=' -f2`
+PREFIX=`cat ${CONFIG_FILE} | grep PREFIX | cut -d'=' -f2`
 
 EMPTY='""'
 echo ""
 echo "---------- Checking configuration ----------"
-if [ -z $ICR_NAMESPACE_REGION ] || [ $ICR_NAMESPACE_REGION == $EMPTY ] || [ -z $ONBOARDING_ENV ] || [ $ONBOARDING_ENV == $EMPTY ] || [ -z $ICR_IMAGE ] || [ $ICR_IMAGE == $EMPTY ] || [ -z $GC_OBJECT_ID ] || [ $GC_OBJECT_ID == $EMPTY ] || [ -z $BROKER_ICR_NAMESPACE_URL ] || [ $BROKER_ICR_NAMESPACE_URL == $EMPTY ];
+if [ -z $PREFIX ] || [ $PREFIX == $EMPTY ] || [ -z $ONBOARDING_ENV ] || [ $ONBOARDING_ENV == $EMPTY ] || [ -z $DEPLOYMENT_ENV ] || [ $DEPLOYMENT_ENV == $EMPTY ] || [ -z $GC_OBJECT_ID ] || [ $GC_OBJECT_ID == $EMPTY ];
 then
-	echo ""
+	echo -e "${Red}"
 	echo "*******************************************************************************"
 	echo "build config properties not set !" ;
 	echo "refer README to set values" ;
 	echo "Exiting..." ;
 	echo "*******************************************************************************"
-	echo ""
+	echo -e "${RCol}"
 	exit 1;
 else
-	echo "Ok"
+	echo -e "${Gre}Ok${RCol}"
 fi
 
 echo ""
 echo "---------- Checking secrets ----------"
 if [ -z $DEPLOYMENT_IAM_API_KEY ] || [ $DEPLOYMENT_IAM_API_KEY == $EMPTY ] || [ -z $ONBOARDING_IAM_API_KEY ] || [ $ONBOARDING_IAM_API_KEY == $EMPTY ];
 then
-	echo ""
+	echo -e "${Red}"
 	echo "*******************************************************************************"
 	echo "secrets not set !" ;
 	echo "make sure these values are provided!" ;
@@ -36,8 +37,8 @@ then
 	echo "refer README to set values" ;
 	echo "Exiting..." ;
 	echo "*******************************************************************************"
-	echo ""
+	echo -e "${RCol}"
 	exit 1;
 else
-	echo "Ok"
+	echo -e "${Gre}Ok${RCol}"
 fi

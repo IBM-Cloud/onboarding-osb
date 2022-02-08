@@ -37,23 +37,23 @@ get-catalog:
 	@echo "Getting catalog.json"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
+	@sudo docker run --entrypoint "./deploy/get_catalog_json.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-catalog osb-img
 
 build:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
+	@./deploy/check_build_config.sh  || $(MAKE) cleanup-build
 	@echo ""
 	@echo "*******************************************************************************"
 	@echo "Logging to ibm container registry on docker"
 	@echo "*******************************************************************************"
 	@echo ""
-	@./deploy/docker_login.sh
+	@./deploy/docker_login.sh || $(MAKE) cleanup-build
 	$(MAKE) build-job || $(MAKE) cleanup-build
-	$(MAKE) cleanup-build
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-build
 	@rm _time_$@.txt
 
 deploy:
@@ -64,12 +64,12 @@ deploy-ce:
 	date +%s > _time_$@.txt
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) ce-env || $(MAKE) env-error
-	@./deploy/ce/check_deploy_config_ce.sh
+	@./deploy/ce/check_deploy_config_ce.sh || $(MAKE) cleanup-deploy-ce
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
-	$(MAKE) cleanup-deploy-ce
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-deploy-ce
 	@rm _time_$@.txt
 
 build-deploy-ce:
@@ -77,15 +77,15 @@ build-deploy-ce:
 	$(MAKE) init || $(MAKE) init-error
 	$(MAKE) build-env || $(MAKE) env-error
 	$(MAKE) ce-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
-	@./deploy/ce/check_deploy_config_ce.sh
+	@./deploy/check_build_config.sh || $(MAKE) cleanup-build
+	@./deploy/ce/check_deploy_config_ce.sh || $(MAKE) cleanup-deploy-ce
 	@./deploy/docker_login.sh 
 	$(MAKE) build-job || $(MAKE) cleanup-build
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
-	$(MAKE) cleanup-build
-	$(MAKE) cleanup-deploy-ce
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
+	$(MAKE) cleanup-build
+	$(MAKE) cleanup-deploy-ce
 	@rm _time_$@.txt
 
 # Helper Goals
@@ -115,8 +115,8 @@ build-job:
 	@echo "Building and pushing image to ibm container registry"
 	@echo "*******************************************************************************"
 	@echo ""
-	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
-	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-build osb-img
+	@sudo docker run --entrypoint "./deploy/handle_icr_namespace.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} -e ONBOARDING_IAM_API_KEY=${ONBOARDING_IAM_API_KEY} --name osb-container-namespace osb-img
+	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.temp.properties --name osb-container-build osb-img
 	@./deploy/build_image.sh $(shell pwd)
 
 deploy-job-ce:
@@ -126,13 +126,11 @@ deploy-job-ce:
 	@echo "Deploying image to code-engine"
 	@echo "*******************************************************************************"
 	@echo ""
-	@./deploy/ce/ce_export_env.sh
-	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
+	@sudo docker run --entrypoint "./deploy/ce/deploy_ce.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/ce/ce.config.temp.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-ce osb-img
 
 build-env:
 	@./deploy/build_export_env.sh
-	$(shell export $(cat deploy/build.config.properties | xargs) > /dev/null)
+	$(shell export $(cat deploy/build.config.temp.properties | xargs) > /dev/null)
 
 ce-env:
 	@./deploy/ce/ce_export_env.sh
@@ -186,13 +184,20 @@ cleanup-build:
 	@sudo docker container rm osb-container-namespace > /dev/null || $(MAKE) skip-message
 	@sudo docker container stop osb-container-build > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
+	@rm deploy/build.config.temp.properties > /dev/null || $(MAKE) skip-message
+	@rm _time_build.txt || $(MAKE) skip-message
 	@echo "Done."
+	@exit 1
 
 cleanup-deploy-ce:
 	@echo  ......cleaning up after ce deploy
 	@sudo docker container stop osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
 	@sudo docker container rm osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
+	@rm deploy/ce/ce.config.temp.properties > /dev/null || $(MAKE) skip-message
+	@rm _time_deploy-ce.txt || $(MAKE) skip-message
+	@rm _time_build-deploy-ce.txt || $(MAKE) skip-message
 	@echo "Done."
+	@exit 1
 
 skip-message:
 	@echo 

@@ -3,7 +3,7 @@
 ## 1.Prerequisite 
 - node 14.17.* or newer
 - node 6.14.13 or newer
-- `suggested: Lastest LTS node install`
+- `suggested: Lastest LTS node install` [See Guide](https://nodejs.org/en/)
 
 </br>
 
@@ -19,7 +19,7 @@
 ## 3. Building project
 - ```npm run build```
 
-	This creates build for react application which will is used in java application.
+	This creates build for react application which will be used in java application.
 
 	### Build java application again to test changes.
 	> Run this inside project root folder

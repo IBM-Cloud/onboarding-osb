@@ -1,11 +1,13 @@
 #!/bin/bash
+
+source deploy/colorcodes.sh
+
 IAM_TEST_URL="https://iam.test.cloud.ibm.com/identity/token"
 IAM_PROD_URL="https://iam.cloud.ibm.com/identity/token"
 GC_TEST_URL="https://globalcatalog.test.cloud.ibm.com"
 GC_PROD_URL="https://globalcatalog.cloud.ibm.com"
 
 echo "Getting Access Token"
-echo "ONBOARDING ENV: $ONBOARDING_ENV"
 if [ "$ONBOARDING_ENV" = "stage" ] || [ "$ONBOARDING_ENV" = "STAGE" ]; then
 	IAM_URL=$IAM_TEST_URL
 	GC_URL=$GC_TEST_URL
@@ -26,7 +28,8 @@ if [ $check_json == null ];
 then
 	exit 1;
 else
-	echo "Catalog Json Received"
+	echo -e "${Gre} 
+Catalog Json Received ${RCol}"
 fi
 
 children_array=`echo $gcjson | jq '.children'`
@@ -86,5 +89,5 @@ echo "
 Writing Converted Catalog Json To File"
 
 echo `echo $main_json | jq '.'` > src/main/resources/data/catalog.json
-echo "
-Done."
+echo -e "${Gre} 
+Done. ${RCol}"

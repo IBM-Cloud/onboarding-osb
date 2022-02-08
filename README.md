@@ -106,22 +106,12 @@ Complete the properties file with the instructions provided below and export as 
     - In Partner Center, this value can be found in the Brokers tab. Additional help is available by clicking the _Open the guide_ button in the Broker tab 
     - To find it in RMC 
       - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://cloud.ibm.com/onboarding/summary/[your-service]`
-  - #### BROKER_ICR_NAMESPACE_URL
-    - This is the IBM Container Registry namespace in the [Deployment Cloud Account](#deployment-ibm-cloud-account) where the OSB container image will be uploaded. You may choose one of the available namespaces [here](https://cloud.ibm.com/registry/namespaces)
-    
-      If you do not want to use an exisitng namespace, simply provide a unique name and the automation will create one for you. If you would like to create it manually please follow [these](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) instructions and provide the name
-    - eg. `us.icr.io/yournamespace`
-  - #### ICR_IMAGE
-    - is the name for the broker container image that will be pushed on ICR namespace in the [Deployment Cloud Account](#deployment-ibm-cloud-account)
-    
       eg. `broker-img`
-  - #### ICR_NAMESPACE_REGION
-    - is the region in which the namespace is created (or is to be created). The region can be found [here](https://cloud.ibm.com/registry/start)
-
-      eg. `us-south` for Dallas, `eu-central` for Frankfurt
   - #### ICR_RESOURCE_GROUP
     - is the resource group under which ICR namespace exists (or will be created). The resource group name can be found [here](https://cloud.ibm.com/registry/namespaces)
       eg. `Default`
+  - #### PREFIX
+    - is used to generate other required variables as ICR image name, namespace and url.
     <br />
 
 ### 3. Set the variables in your environment using:
@@ -148,30 +138,23 @@ Our next step now is to deploy the broker application image we just created. The
 
 ### 1. Complete the [`deploy/ce/ce.config.properties`](deploy/ce/ce.config.properties) config 
 Complete the properties file with the instructions provided below and export as environment variables    
-  - #### APP_NAME
-    - is the application name you would like to give the broker on Code Engine.  Try using a unique identifier in the name so that you dont run into conflicts.  
   - #### ONBOARDING_ENV
     - is set to `stage` if the IBM Cloud Onboarding is on test.cloud.ibm.com (used by IBMers) or `prod` if the IBM Cloud Onboarding is on cloud.ibm.com 
+  - #### DEPLOYMENT_ENV
+    - is set to `stage` if the IBM Cloud CE Deployment is on test.cloud.ibm.com (used by IBMers) or `prod` if the IBM Cloud Onboarding is on cloud.ibm.com 
   - #### BROKER_USERNAME
     - is the username you would like  to set for the Broker
   - #### BROKER_PASSWORD
     - is the password you would like to set for the Broker 
     > Note: The BROKER_USERNAME and BROKER_PASSWORD values provided here also need to be configured in RMC while publishing broker. If no environment variable present for both default values would be applied from properties.
-  - #### BROKER_ICR_NAMESPACE_URL
-    - use the same namespace URL provided in `deploy/build.config.properties` during the build step
-    - eg. `us.icr.io/yournamespace`
-  - #### ICR_IMAGE
-    - use the same image name provided in `deploy/build.config.properties` during the build step
-  - #### CE_PROJECT
-    - Select a project from the [list of available projects](https://cloud.ibm.com/codeengine/projects). You can [create a new one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-manage-project#create-a-project) yourself or give us a name and we will create one for you. 
   - #### CE_REGION
     - Set region for IBM Code Engine deployment. This is value in the `Location` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
   - #### CE_RESOURCE_GROUP
     - Select resource group to target for IBM Code Engine. This is value in the  `Resource group` column from the [list of available projects](https://cloud.ibm.com/codeengine/projects) you would be using to create the app into. 
-  - #### CE_REGISTRY_SECRET_NAME
-    - Select an exisitg registry access from your project or [create one](https://cloud.ibm.com/docs/codeengine?topic=codeengine-add-registry#add-registry-access-ce)
   - #### PC_URL [optional]
     - Partner Center url for dashboard. use [this](https://cloud.ibm.com/partner-center/sell) to see your applications and copy url.
+  - #### PREFIX
+    - is used to generate other required variables as ICR image name, namespace & url, Code Engine app name, registry secret name.
 
 
     

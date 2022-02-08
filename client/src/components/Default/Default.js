@@ -81,11 +81,11 @@ function Default() {
 						<div className="bx--col-lg-12">
 							<p>
 								{!_.isEmpty(catalog) ? catalog.services[0].description : <SkeletonText width="15%" className="skeletopn-text" />}
-								<Link className="inline-link" target="_blank" href={documentationUrl}>Learn more<Launch16 aria-label="open link" className="svg-right fill-link" /></Link>
+								<Link className="inline-link" target="_blank" href={documentationUrl ? documentationUrl : "#"}>Learn more<Launch16 aria-label="open link" className="svg-right fill-link" /></Link>
 							</p>
 						</div>
 						<div className="bx--col-lg-4 link-left">
-							<Link className="" target="_blank" href={instructionsUrl}>How to use<Launch16 aria-label="open link" className="svg-right fill-link" /></Link>
+							<Link className="" target="_blank" href={instructionsUrl ? instructionsUrl : "#"}>How to use<Launch16 aria-label="open link" className="svg-right fill-link" /></Link>
 						</div>
 					</div>
 					<div className="bx--row sub-row">
