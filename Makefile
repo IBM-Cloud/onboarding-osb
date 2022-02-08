@@ -9,14 +9,6 @@ all:
 	@echo "		required env variables: "
 	@echo "		 ONBOARDING_ENV, GC_OBJECT_ID, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, ICR_NAMESPACE_REGION, ICR_RESOURCE_GROUP"
 	@echo ""
-	@echo "	make deploy-cf"
-	@echo ""
-	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey METERING_API_KEY=your-metering-apikey make deploy-cf"
-	@echo ""
-	@echo "		deploy image on cloud foundry."
-	@echo "		required env variables: "
-	@echo "		 APP_NAME ,BROKER_USERNAME ,BROKER_PASSWORD ,BROKER_ICR_NAMESPACE_URL ,ICR_IMAGE ,CF_API ,CF_ORGANIZATION ,CF_SPACE"
-	@echo ""
 	@echo "	make deploy-ce"
 	@echo ""
 	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey METERING_API_KEY=your-metering-apikey make deploy-ce"
@@ -24,13 +16,6 @@ all:
 	@echo "		deploy image on code engine."
 	@echo "		required env variables: "
 	@echo "		 APP_NAME, BROKER_USERNAME, BROKER_PASSWORD, BROKER_ICR_NAMESPACE_URL, ICR_IMAGE, CE_PROJECT, CE_REGION, CE_RESOURCE_GROUP, CE_REGISTRY_SECRET_NAME"
-	@echo ""
-	@echo "	make build-deploy-cf"
-	@echo ""
-	@echo "		DEPLOYMENT_IAM_API_KEY=your-deployment-apikey ONBOARDING_IAM_API_KEY=your-onboarding-apikey METERING_API_KEY=your-metering-apikey make build-deploy-cf"
-	@echo ""
-	@echo "		make build + make deploy-cf."
-	@echo "		required env variables: all from commands build and deploy-cf "
 	@echo ""
 	@echo "	make build-deploy-ce"
 	@echo ""
@@ -73,19 +58,7 @@ build:
 
 deploy:
 	@echo ""
-	@echo "available options: make deploy-cf"
-
-deploy-cf:
-	date +%s > _time_$@.txt
-	$(MAKE) init || $(MAKE) init-error
-	$(MAKE) cf-env || $(MAKE) env-error
-	@./deploy/cf/check_deploy_config_cf.sh
-	@./deploy/docker_login.sh
-	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
-	$(MAKE) cleanup-deploy-cf
-	@echo ""
-	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
-	@rm _time_$@.txt
+	@echo "available options: make deploy-ce"
 
 deploy-ce:
 	date +%s > _time_$@.txt
@@ -95,22 +68,6 @@ deploy-ce:
 	@./deploy/docker_login.sh
 	$(MAKE) deploy-job-ce || $(MAKE) cleanup-deploy-ce
 	$(MAKE) cleanup-deploy-ce
-	@echo ""
-	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
-	@rm _time_$@.txt
-
-build-deploy-cf:
-	date +%s > _time_$@.txt
-	$(MAKE) init || $(MAKE) init-error
-	$(MAKE) build-env || $(MAKE) env-error
-	$(MAKE) cf-env || $(MAKE) env-error
-	@./deploy/check_build_config.sh
-	@./deploy/cf/check_deploy_config_cf.sh
-	@./deploy/docker_login.sh
-	$(MAKE) build-job || $(MAKE) cleanup-build
-	$(MAKE) deploy-job-cf || $(MAKE) cleanup-deploy-cf
-	$(MAKE) cleanup-build
-	$(MAKE) cleanup-deploy-cf
 	@echo ""
 	@./deploy/convert_time.sh $$(($$(date +%s)-$$(cat  _time_$@.txt))) $@
 	@rm _time_$@.txt
@@ -141,7 +98,6 @@ init:
 	@echo ""
 	@chmod a+x deploy/*
 	@chmod a+x deploy/ce/*
-	@chmod a+x deploy/cf/*
 	@echo $(shell pwd)
 
 build-job:
@@ -163,15 +119,6 @@ build-job:
 	@sudo docker run --entrypoint "./deploy/install.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/build.config.properties --name osb-container-build osb-img
 	@./deploy/build_image.sh $(shell pwd)
 
-deploy-job-cf:
-	@echo  starting deploy...
-	@echo ""
-	@echo "*******************************************************************************"
-	@echo "Deploying image to cloudfoundry"
-	@echo "*******************************************************************************"
-	@echo ""
-	@sudo docker run --entrypoint "./deploy/cf/deploy_cf.sh" -v $(shell pwd):/osb-app -i --workdir /osb-app  --env-file deploy/cf/cf.config.properties -e METERING_API_KEY=${METERING_API_KEY} -e DEPLOYMENT_IAM_API_KEY=${DEPLOYMENT_IAM_API_KEY} --name osb-container-deploy-cf osb-img
-
 deploy-job-ce:
 	@echo  starting deploy...
 	@echo ""
@@ -190,10 +137,6 @@ build-env:
 ce-env:
 	@./deploy/ce/ce_export_env.sh
 	$(shell export $(cat deploy/ce/ce.config.properties | xargs) > /dev/null)
-	
-cf-env:
-	@./deploy/cf/cf_export_env.sh
-	$(shell export $(cat deploy/cf/cf.config.properties | xargs) > /dev/null)
 
 error:
 	@echo  ......Error encountered......
@@ -232,7 +175,6 @@ cleanup:
 	@echo "*******************************************************************************"
 	@echo ""
 	$(MAKE) cleanup-build
-	$(MAKE) cleanup-deploy-cf
 	$(MAKE) cleanup-deploy-ce
 	@echo "Full cleanup done."
 
@@ -246,12 +188,6 @@ cleanup-build:
 	@sudo docker container rm osb-container-build > /dev/null || $(MAKE) skip-message
 	@echo "Done."
 
-cleanup-deploy-cf:
-	@echo  ......cleaning up after cf deploy
-	@sudo docker container stop osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
-	@sudo docker container rm osb-container-deploy-cf > /dev/null || $(MAKE) skip-message
-	@echo "Done."
-
 cleanup-deploy-ce:
 	@echo  ......cleaning up after ce deploy
 	@sudo docker container stop osb-container-deploy-ce > /dev/null || $(MAKE) skip-message
@@ -263,4 +199,4 @@ skip-message:
 	@echo Already clean. skipping.
 	@echo
 
-.PHONY: all	build deploy deploy-cf build-deploy-cf get-catalog cleanup init
+.PHONY: all	build deploy get-catalog cleanup init
