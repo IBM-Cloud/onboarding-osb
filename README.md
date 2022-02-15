@@ -4,11 +4,7 @@
 ## Overview
 Every [service onboarding in IBM Cloud Catalog](https://cloud.ibm.com/docs/sell?topic=sell-overview) requires to build a broker app that follow the [Open Service Broker](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md) (OSB) spec. This project provides an quick setup _reference broker_ implementation. 
 
-There are 2 way to onboard a service in the IBM Cloud catalog: 
-  - the traditional [Resource Management Console](https://cloud.ibm.com/onboarding/dashboard)  
-  - the new [Partner Center](https://cloud.ibm.com/partner-center/sell) 
-
-As you onboard through Partner Center or RMC, you will  be required to provide your broker app URL. This readme provides a step by step guide on how to configure and deploy a reference broker app that hooks up to your service and helps you test an end to end flow early in the onboarding process. This is all done with the help of the CLI makefile automation that performs the following tasks for you:
+As you onboard through [Partner Center](https://cloud.ibm.com/partner-center/sell) , you will be required to provide your broker app URL. This readme provides a step by step guide on how to configure and deploy a reference broker app that hooks up to your service and helps you test an end to end flow early in the onboarding process. This is all done with the help of the CLI makefile automation that performs the following tasks for you:
 
  - builds the Java based OSB broker code using maven  
  - builds a docker container image of the OSB broker app, 
@@ -21,7 +17,7 @@ As you onboard through Partner Center or RMC, you will  be required to provide y
 In the sections to follow you will come across many references to Onboarding and Deployment IBM Cloud account. This section tries do demystify the two.
 
 #### _Onboarding IBM Cloud Account_ 
-is the IBM Cloud account under which your service is being onboarded. The will be the cloud account selection when you are working with RMC or Partner Center.
+is the IBM Cloud account under which your service is being onboarded. The will be the cloud account selection when you are working with Partner Center.
 
 > Note to IBMers: If you are an IBMers, very likely while you will  be onboarding via **test**.cloud.ibm.com, your Deployment IBM Cloud account MUST be **cloud.ibm.com**.
 
@@ -36,16 +32,15 @@ is the cloud account under which you will be deploying your broker app using  Co
 1.  #### [Docker](https://docs.docker.com/engine/install/) setup locally on your computer
 2. #### IBM Cloud Access
     The following privileges are required 
-    1. If using RMC, you have to be added as a contributor to the service in RMC. (Ignore this for Partner Center) 
-    2. You have to be invited to the IBM Cloud account where the service is being on-boarded
-    3. You will need the following access in the  Deployment IBM Cloud Account 
+    1. You have to be invited to the IBM Cloud account where the service is being on-boarded
+    2. You will need the following access in the  Deployment IBM Cloud Account 
         
         a. Writer and Editor access to IBM Container Registry
 
         b. Editor access to IBM Cloud Code Engine
         
         Search your user and verify you have the required access [here](https://cloud.ibm.com/iam/users) 
-    4. You have to be added to the service in the [Global catalog](https://globalcatalog.cloud.ibm.com) (via the Visibility tab in the UI)
+    3. You have to be added to the service in the [Global catalog](https://globalcatalog.cloud.ibm.com) (via the Visibility tab in the UI)
 
 
 <!-- 3. IBM Container Registry namespace
@@ -60,7 +55,7 @@ is the cloud account under which you will be deploying your broker app using  Co
 
   - **ONBOARDING_IAM_API_KEY**
 
-    is the API key created in cloud account where the SaaS service is being onboarded via RMC or PC. The API key will used to access [Global Catalog](https://globalcatalog.cloud.ibm.com) API
+    is the API key created in cloud account where the SaaS service is being onboarded via Partner Center. The API key will used to access [Global Catalog](https://globalcatalog.cloud.ibm.com) API
     
   - **DEPLOYMENT_IAM_API_KEY**
 
@@ -84,7 +79,7 @@ is the cloud account under which you will be deploying your broker app using  Co
     
     Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
 
-    If you are onboarding via RMC, the Service ID is created from the _Access (IAM)_ page. Once created, find your service it listed [here](https://cloud.ibm.com/iam/serviceids). Next, click the 3 dot menu and click _Unlock_ to unlock the serviceID for BSS. Next, got ot the API Keys tab and create an API key for it. Note down the API Key as this will be used as METERING_API_KEY during the deploy step   
+    <!-- If you are onboarding via RMC, the Service ID is created from the _Access (IAM)_ page. Once created, find your service it listed [here](https://cloud.ibm.com/iam/serviceids). Next, click the 3 dot menu and click _Unlock_ to unlock the serviceID for BSS. Next, got ot the API Keys tab and create an API key for it. Note down the API Key as this will be used as METERING_API_KEY during the deploy step    -->
 
 ## Building the Broker
 
@@ -104,8 +99,8 @@ Complete the properties file with the instructions provided below and export as 
   - #### GC_OBJECT_ID
     <!-- - To fetch catalog.json -->
     - In Partner Center, this value can be found in the Brokers tab. Additional help is available by clicking the _Open the guide_ button in the Broker tab 
-    - To find it in RMC 
-      - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://cloud.ibm.com/onboarding/summary/[your-service]`
+    <!-- - To find it in RMC 
+      - Go to Resource Management Console  -> _Summary_ page and copy the value of ID field under the _Service details_ section. Example RMC summary page url: `https://cloud.ibm.com/onboarding/summary/[your-service]` -->
   - #### BROKER_ICR_NAMESPACE_URL
     - This is the IBM Container Registry namespace in the [Deployment Cloud Account](#deployment-ibm-cloud-account) where the OSB container image will be uploaded. You may choose one of the available namespaces [here](https://cloud.ibm.com/registry/namespaces)
     
@@ -156,7 +151,7 @@ Complete the properties file with the instructions provided below and export as 
     - is the username you would like  to set for the Broker
   - #### BROKER_PASSWORD
     - is the password you would like to set for the Broker 
-    > Note: The BROKER_USERNAME and BROKER_PASSWORD values provided here also need to be configured in RMC while publishing broker. If no environment variable present for both default values would be applied from properties.
+    > Note: The BROKER_USERNAME and BROKER_PASSWORD values provided here also need to be configured in Partner Center when publishing the broker.
   - #### BROKER_ICR_NAMESPACE_URL
     - use the same namespace URL provided in `deploy/build.config.properties` during the build step
     - eg. `us.icr.io/yournamespace`
