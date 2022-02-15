@@ -13,7 +13,7 @@ As you onboard through Partner Center or RMC, you will  be required to provide y
  - builds the Java based OSB broker code using maven  
  - builds a docker container image of the OSB broker app, 
  - creates an IBM Container Registry (ICR) namespace (if it does exist) and uploads the image to the ICR namesapce 
- - deploys the app on either IBM Cloud Foundry or IBM Code Engine
+ - deploys the app on IBM Code Engine
 
 > Note that this broker is not recommended to be used in production. It to be used as a reference to help you build your production broker
 
@@ -26,9 +26,9 @@ is the IBM Cloud account under which your service is being onboarded. The will b
 > Note to IBMers: If you are an IBMers, very likely while you will  be onboarding via **test**.cloud.ibm.com, your Deployment IBM Cloud account MUST be **cloud.ibm.com**.
 
 #### _Deployment IBM Cloud Account_ 
-is the cloud account under which you will be deploying your broker app using either Code Engine or Cloud Foundry. You Deployment Cloud Account could be same as your Onboarding Cloud account as long as the account is on cloud.ibm.com (IBM Cloud Production)
+is the cloud account under which you will be deploying your broker app using  Code Engine. You Deployment Cloud Account could be same as your Onboarding Cloud account as long as the account is on cloud.ibm.com (IBM Cloud Production)
 
-> Note to IBMers: The Deployment  cloud account **MUST** be an account in **cloud.ibm.com** and **NOT** in test.cloud.ibm.com or any other flavor of IBM cloud. This implies, the IBM Container registry, namespace and the IBM Code Engine or Cloud Foundry app to be deployed in the sections to follow have to be on  cloud.ibm.com
+> Note to IBMers: The Deployment  cloud account **MUST** be an account in **cloud.ibm.com** and **NOT** in test.cloud.ibm.com or any other flavor of IBM cloud. This implies, the IBM Container registry, namespace and the IBM Code Engine app to be deployed in the sections to follow have to be on  cloud.ibm.com
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ is the cloud account under which you will be deploying your broker app using eit
         
         a. Writer and Editor access to IBM Container Registry
 
-        b. Editor access to IBM Cloud Foundry or Code Engine
+        b. Editor access to IBM Cloud Code Engine
         
         Search your user and verify you have the required access [here](https://cloud.ibm.com/iam/users) 
     4. You have to be added to the service in the [Global catalog](https://globalcatalog.cloud.ibm.com) (via the Visibility tab in the UI)
@@ -68,7 +68,7 @@ is the cloud account under which you will be deploying your broker app using eit
       
       a. Writer and Editor access to IBM Container Registry
 
-      b. Editor access to IBM Cloud Foundry or IBM Code Engine 
+      b. Editor access to IBM Cloud Code Engine 
     
     Find your user and verify you have the required access [here](https://cloud.ibm.com/iam/users)
 
@@ -142,7 +142,7 @@ Running the below command in your terminal will maven build your broker, package
 *Congratulations!* We now have the broker application image.  
 Log in to IBM Cloud and look under [ICR namespaces](https://cloud.ibm.com/registry/namespaces) to find your image. 
 
-Our next step now is to deploy the broker application image we just created. The CLI tool we provide has 2 supported deployment platforms - [IBM Cloud Code Engine](https://www.ibm.com/cloud/code-engine) and [IBM Cloud Foundry](https://www.ibm.com/cloud/cloud-foundry). Based on the platform of your choice, just to the next appropriate section section
+Our next step now is to deploy the broker application image we just created. The CLI tool we provide supports deployment to [IBM Cloud Code Engine](https://www.ibm.com/cloud/code-engine). Based on the platform of your choice, just to the next appropriate section section
 
 ## Deploying the Broker on IBM Cloud Code Engine
 
