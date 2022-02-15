@@ -188,56 +188,10 @@ Running the below command in your terminal will deploy your app to IBM Code Engi
 
 <br/>
 
-## Deploying the Broker on IBM Cloud Foundry
-
-### 1. Complete the [`deploy/cf/config.properties`](deploy/cf/build.config.properties) config
-Complete the properties file with the instructions provided below and export as environment variables   <br />
-
-  - #### APP_NAME
-    - Cloud Foundry broker application name for deployment. Tip: This name has to be unique across all of IBM Cloud Foundry application. Try using a unique identifier in the name so that you dont run into conflicts.  
-  - #### ONBOARDING_ENV
-    - is set to `stage` if the IBM Cloud Onboarding is on test.cloud.ibm.com (used by IBMers) or `prod` if the IBM Cloud Onboarding is on cloud.ibm.com
-  - #### BROKER_USERNAME
-    - Set a username for the Broker API
-  - #### BROKER_PASSWORD
-    - Set a password for the Broker API
-    > Note: The BROKER_USERNAME and BROKER_PASSWORD values provided here also need to be configured in RMC while publishing broker.
-  - #### BROKER_ICR_NAMESPACE_URL
-    - IBM Container registry namespace where your broker container image will be uploaded. Choose from a list of namespaces [here](https://cloud.ibm.com/registry/namespaces) or  [create an ICR namespace](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_setup_cli_namespace) if non exists.
-    - eg. `us.icr.io/yournamespace`
-  - #### ICR_IMAGE
-    - Image name to push on namespace
-  - #### CF_API
-    - Cloud Foundry API endpoint. See list of available endpoints [here](https://ondeck.console.cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-ts-cf-apps)
-  - #### CF_ORGANIZATION
-    - Name of organization to be targeted for deployment. Your orgs can be found [here](https://cloud.ibm.com/account/cloud-foundry)
-  - #### CF_SPACE
-    -  Name of space to be targeted for deployment. After selecting your Org [here](https://cloud.ibm.com/account/cloud-foundry), a list of available spaces can be seen.
-  - #### PC_URL [optional]
-    - Partner Center url for dashboard. use [this](https://cloud.ibm.com/partner-center/sell) to see your applications and copy url.
-
-  
-      <br />
-
-### 2. Set the variables in your environment
-    
-    export $(cat deploy/cf/cf.config.properties)
-
-### 3. Deploy to IBM Cloud Foundry
-Running the below command in your terminal will deploy your app to IBM Cloud Foundry. If you have not yet created the required API keys refer to section on [IBM Cloud API keys](#ibm-cloud-api-keys)
-
-    DEPLOYMENT_IAM_API_KEY=replace-with-your-DEPLOYMENT_IAM_API_KEY  METERING_API_KEY=your-replace-with-your-METERING_API_KEY make deploy-cf 
-
-  <br />
-
 ## Building and deploying in a single command 
 
 The CLI tool also provides a single command that both builds and deploys the the broker app   
-  
-  For Cloud Foundry:
-
-    DEPLOYMENT_IAM_API_KEY=replace-with-your-DEPLOYMENT_IAM_API_KEY ONBOARDING_IAM_API_KEY=replace-with-your-ONBOARDING_IAM_API_KEY METERING_API_KEY=your-replace-with-your-METERING_API_KEY make build-deploy-cf
-  
+ 
  For Code Engine:
 
     DEPLOYMENT_IAM_API_KEY=replace-with-your-DEPLOYMENT_IAM_API_KEY ONBOARDING_IAM_API_KEY=replace-with-your-ONBOARDING_IAM_API_KEY METERING_API_KEY=your-replace-with-your-METERING_API_KEY make build-deploy-ce
